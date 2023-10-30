@@ -1,7 +1,23 @@
 import React, { Component } from 'react';
 import classes from './Search.module.css';
+import '../../../App.css';
 
-class Search extends Component {
+interface SearchProps {
+  handleRequest: (request: string) => void;
+}
+
+interface SearchState {
+  request: string;
+}
+
+class Search extends Component<SearchProps, SearchState> {
+  constructor(props: SearchProps) {
+    super(props);
+    this.state = {
+      request: '',
+    };
+  }
+
   handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ request: e.target.value });
   };
@@ -13,10 +29,15 @@ class Search extends Component {
           autoFocus={true}
           className={classes.input}
           type={'text'}
-          placeholder={'your request...'}
+          placeholder={'your planet... (Naboo, Hoth and other)'}
           onChange={this.handleChange}
         />
-        <button className={classes.button}>Search</button>
+        <button
+          onClick={() => this.props.handleRequest(this.state.request)}
+          className={'button'}
+        >
+          Search
+        </button>
       </div>
     );
   }

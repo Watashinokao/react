@@ -19,17 +19,3 @@
     background-color: #ffdce2;
 }
 
-.button {
-    padding: 5px;
-    font-size: 18px;
-    border-radius: 30px;
-    height: 40px;
-    color: #414141;
-    background-color: #ffdce2;
-    transition: all .2s ease;
-}
-
-.button:hover {
-    background-color: #b2b2b2;
-    color: #252525;
-}
