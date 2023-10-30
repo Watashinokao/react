@@ -53,6 +53,7 @@ class App extends Component<AppProps, AppState> {
           }));
         },
         (error: string) => {
+          console.log(error);
           this.setState((prevState) => ({
             ...prevState,
             isLoaded: true,
@@ -103,7 +104,7 @@ class App extends Component<AppProps, AppState> {
         <div className={'app'}>
           <ErrorBoundary>
             <Header handleRequest={this.handleRequest} />
-            <Main results={this.state.items.results} />
+            <Main results={items.results} />
           </ErrorBoundary>
         </div>
       );
