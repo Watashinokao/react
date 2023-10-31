@@ -65,50 +65,61 @@ class App extends Component<AppProps, AppState> {
 
   componentDidMount() {
     const prevRequest = localStorage.getItem('prevRequest');
-    if (prevRequest) {
-      this.setState((prevState) => ({
-        ...prevState,
-        request: prevRequest,
-      }));
-      this.fetchRequest(prevRequest);
-    }
+    this.setState((prevState) => ({
+      ...prevState,
+      isLoaded: false,
+      request: prevRequest || '',
+    }));
+    this.fetchRequest(prevRequest || '');
   }
 
   handleRequest = (request: string) => {
-    if (request) {
       this.setState((prevState) => ({
         ...prevState,
         isLoaded: false,
       }));
       this.fetchRequest(request.trim());
       localStorage.setItem('prevRequest', request.trim());
-    }
   };
 
   render() {
     const { error, isLoaded, items } = this.state;
-    if (error) {
-      return (
-        <div className={'app'}>
-          <p>Error</p>
+    // if (error) {
+    //   return (
+    //     <div className={'app'}>
+    //       <p>Error</p>
+    //     </div>
+    //   );
+    // } else if (!isLoaded) {
+    //   return (
+    //     <div className={'app'}>
+    //       <p>Loading</p>
+    //     </div>
+    //   );
+    // } else {
+    //   return (
+    //     <div className={'app'}>
+    //       <ErrorBoundary>
+    //         <Header handleRequest={this.handleRequest} />
+    //         <Main results={items.results} />
+    //       </ErrorBoundary>
+    //     </div>
+    //   );
+    // }
+    return (
+        <div className={"app"}>
+          {
+            error
+                ? <p>Error</p>
+                : !isLoaded
+                    ? <p>Loading</p>
+                    : <ErrorBoundary>
+                        <Header handleRequest={this.handleRequest} />
+                        <Main results={items.results} />
+                      </ErrorBoundary>
+          }
         </div>
-      );
-    } else if (!isLoaded) {
-      return (
-        <div className={'app'}>
-          <p>Loading</p>
-        </div>
-      );
-    } else {
-      return (
-        <div className={'app'}>
-          <ErrorBoundary>
-            <Header handleRequest={this.handleRequest} />
-            <Main results={items.results} />
-          </ErrorBoundary>
-        </div>
-      );
-    }
+    )
   }
 }
 
