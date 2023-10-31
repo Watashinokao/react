@@ -1,13 +1,13 @@
 .header {
-    width: 100%;
-    background-color: #797979;
-    height: 50px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+  width: 100%;
+  background-color: #797979;
+  height: 50px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .name {
-    font-size: 20px;
-    color: #252525;
+  font-size: 20px;
+  color: #252525;
 }

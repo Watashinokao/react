@@ -74,52 +74,30 @@ class App extends Component<AppProps, AppState> {
   }
 
   handleRequest = (request: string) => {
-      this.setState((prevState) => ({
-        ...prevState,
-        isLoaded: false,
-      }));
-      this.fetchRequest(request.trim());
-      localStorage.setItem('prevRequest', request.trim());
+    this.setState((prevState) => ({
+      ...prevState,
+      isLoaded: false,
+    }));
+    this.fetchRequest(request.trim());
+    localStorage.setItem('prevRequest', request.trim());
   };
 
   render() {
     const { error, isLoaded, items } = this.state;
-    // if (error) {
-    //   return (
-    //     <div className={'app'}>
-    //       <p>Error</p>
-    //     </div>
-    //   );
-    // } else if (!isLoaded) {
-    //   return (
-    //     <div className={'app'}>
-    //       <p>Loading</p>
-    //     </div>
-    //   );
-    // } else {
-    //   return (
-    //     <div className={'app'}>
-    //       <ErrorBoundary>
-    //         <Header handleRequest={this.handleRequest} />
-    //         <Main results={items.results} />
-    //       </ErrorBoundary>
-    //     </div>
-    //   );
-    // }
     return (
-        <div className={"app"}>
-          {
-            error
-                ? <p>Error</p>
-                : !isLoaded
-                    ? <p>Loading</p>
-                    : <ErrorBoundary>
-                        <Header handleRequest={this.handleRequest} />
-                        <Main results={items.results} />
-                      </ErrorBoundary>
-          }
-        </div>
-    )
+      <div className={'app'}>
+        {error ? (
+          <p>Error</p>
+        ) : !isLoaded ? (
+          <p>Loading</p>
+        ) : (
+          <ErrorBoundary>
+            <Header handleRequest={this.handleRequest} />
+            <Main results={items.results} />
+          </ErrorBoundary>
+        )}
+      </div>
+    );
   }
 }
 

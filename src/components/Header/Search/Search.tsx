@@ -14,7 +14,7 @@ class Search extends Component<SearchProps, SearchState> {
   constructor(props: SearchProps) {
     super(props);
     this.state = {
-      request: '',
+      request: localStorage.getItem('prevRequest') || '',
     };
   }
 
@@ -29,6 +29,7 @@ class Search extends Component<SearchProps, SearchState> {
           autoFocus={true}
           className={classes.input}
           type={'text'}
+          value={this.state.request}
           placeholder={'your planet... (Naboo, Hoth and other)'}
           onChange={this.handleChange}
         />
