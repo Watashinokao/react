@@ -1,26 +1,33 @@
-import React, { Component } from 'react';
+import React, { FC } from 'react';
 import classes from './MainItem.module.css';
-import { Result } from '../../../Interfaces/Interfaces';
 
 interface MainItemProps {
-  item: Result;
+  item: Character;
+  fetchCharacter: (id: number) => void;
+}
+interface Character {
+  films: string[];
+  imageUrl: string;
+  name: string;
+  _id: number;
 }
 
-class MainItem extends Component<MainItemProps> {
-  constructor(props: MainItemProps) {
-    super(props);
-  }
-
-  render() {
-    return (
-      <div className={classes.mainItem}>
-        <p className={classes.name}>Planet: {this.props.item.name}</p>
-        <p>Climate: {this.props.item.climate}</p>
-        <p>Orbital Period: {this.props.item.orbital_period}</p>
-        <p>Diameter: {this.props.item.diameter}</p>
-      </div>
-    );
-  }
-}
+const MainItem: FC<MainItemProps> = (props) => {
+  return (
+    <div
+      className={classes.mainItem}
+      onClick={() => props.fetchCharacter(props.item._id)}
+    >
+      <div
+        className={classes.img}
+        style={{
+          background: `center no-repeat url(${props.item.imageUrl} )`,
+          backgroundSize: 'contain',
+        }}
+      ></div>
+      <p className={classes.name}>{props.item.name}</p>
+    </div>
+  );
+};
 
 export default MainItem;

@@ -1,104 +1,120 @@
 import './App.css';
-import { Component } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import Header from './components/Header/Header';
 import Main from './components/Main/Main';
-import { Result } from './Interfaces/Interfaces';
-import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
+import Pagination from './components/Pagination/Pagination';
 
+interface Character {
+  imageUrl: string;
+  name: string;
+  _id: number;
+  films: string[];
+  tvShow: string[];
+}
 interface MainProps {
-  count: number;
-  next: string;
-  previous: string;
-  results: Result[];
-}
-
-interface AppState {
-  request: string;
-  error: boolean;
-  isLoaded: boolean;
-  items: MainProps;
-  textError: string;
-}
-
-interface AppProps {}
-
-class App extends Component<AppProps, AppState> {
-  constructor(props: AppState) {
-    super(props);
-    this.state = {
-      request: '',
-      textError: '',
-      error: false,
-      isLoaded: true,
-      items: {
-        count: 0,
-        next: '',
-        previous: '',
-        results: [],
-      },
-    };
-  }
-
-  fetchRequest = (request: string) => {
-    fetch(`https://swapi.dev/api/planets?search=${request}`)
-      .then((res) => res.json())
-      .then(
-        (result: MainProps) => {
-          this.setState((prevState) => ({
-            ...prevState,
-            error: false,
-            isLoaded: true,
-            items: result,
-            request: request,
-          }));
-        },
-        (error: string) => {
-          console.log(error);
-          this.setState((prevState) => ({
-            ...prevState,
-            isLoaded: true,
-            error: true,
-          }));
-        }
-      );
+  data: Character[];
+  info: {
+    count: number;
+    nextPage: string;
+    previousPage: string;
+    totalPages: number;
   };
+}
 
-  componentDidMount() {
+const App: FC = () => {
+  const [request, setRequest] = useState<string>('');
+  const [error, setError] = useState<boolean>(false);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [page, setPage] = useState<number>(1);
+  const [results, setResults] = useState<MainProps>({
+    data: [],
+    info: {
+      count: 0,
+      nextPage: '',
+      previousPage: '',
+      totalPages: 0,
+    },
+  });
+
+  useEffect(() => {
     const prevRequest = localStorage.getItem('prevRequest');
-    this.setState((prevState) => ({
-      ...prevState,
-      isLoaded: false,
-      request: prevRequest || '',
-    }));
-    this.fetchRequest(prevRequest || '');
-  }
+    setRequest(prevRequest || '');
+    setIsLoaded(false);
+    fetchRequest(prevRequest || '', page, pageSize);
+  }, [request, page, pageSize]);
 
-  handleRequest = (request: string) => {
-    this.setState((prevState) => ({
-      ...prevState,
-      isLoaded: false,
-    }));
-    this.fetchRequest(request.trim());
+  function fetchRequest(request: string, page: number, pageSize: number) {
+    console.log(request, page, pageSize);
+    fetch(
+      `https://api.disneyapi.dev/character?name=${request}&page=${page}&pageSize=${pageSize}`
+    )
+      .then((res) => res.json())
+      .then((result: MainProps) => {
+        const { info, data } = result;
+        console.log(page);
+
+        setResults({
+          data: data,
+          info: {
+            count: info.count,
+            nextPage: info.nextPage,
+            previousPage: info.previousPage,
+            totalPages: info.totalPages,
+          },
+        });
+
+        setIsLoaded(true);
+        setError(false);
+      })
+      .catch(() => {
+        setIsLoaded(true);
+        setError(true);
+      });
+  }
+  function handlePage(page: string) {
+    switch (page) {
+      case 'next':
+        setPage((count) => count + 1);
+        break;
+      case 'prev':
+        setPage((count) => count - 1);
+
+        break;
+    }
+  }
+  function handlePageSize(size: number) {
+    setPageSize((count) => count + size - count);
+  }
+  function handleRequest(request: string) {
+    setRequest(request);
     localStorage.setItem('prevRequest', request.trim());
-  };
-
-  render() {
-    const { error, isLoaded, items } = this.state;
-    return (
-      <div className={'app'}>
-        {error ? (
-          <p>Error</p>
-        ) : !isLoaded ? (
-          <p>Loading</p>
-        ) : (
-          <ErrorBoundary>
-            <Header handleRequest={this.handleRequest} />
-            <Main results={items.results} />
-          </ErrorBoundary>
-        )}
-      </div>
-    );
   }
-}
+  if (error) {
+    throw new Error('Error Server');
+  }
+  return (
+    <div className={'app'}>
+      <Header handleRequest={handleRequest} />
+      {!isLoaded ? (
+        <img
+          className={'loading'}
+          src="../src/assets/loading.gif"
+          alt={'loading'}
+        />
+      ) : (
+        <>
+          <Pagination
+            info={results.info}
+            handlePage={handlePage}
+            page={page}
+            handlePageSize={handlePageSize}
+          />
+          <Main results={results.data} />
+        </>
+      )}
+    </div>
+  );
+};
 
 export default App;

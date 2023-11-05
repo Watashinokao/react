@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { FC, useState } from 'react';
 import Search from './Search/Search';
 import classes from './Header.module.css';
 import '../../App.css';
@@ -7,29 +7,25 @@ interface HeaderProps {
   handleRequest: (request: string) => void;
 }
 
-class Header extends Component<HeaderProps> {
-  state = {
-    error: false,
+const Header: FC<HeaderProps> = (props) => {
+  const [error, setError] = useState(false);
+
+  const newError = () => {
+    setError(true);
   };
 
-  newError = () => {
-    this.setState({ error: true });
-  };
-
-  render() {
-    if (this.state.error) {
-      throw new Error('Do you want error');
-    }
-    return (
-      <header className={classes.header}>
-        <p className={classes.name}>Planets</p>
-        <Search handleRequest={this.props.handleRequest} />
-        <button className={'button'} onClick={this.newError}>
-          Go Error
-        </button>
-      </header>
-    );
+  if (error) {
+    throw new Error('Do you want error');
   }
-}
+  return (
+    <header className={classes.header}>
+      <p className={classes.name}>Disney character</p>
+      <Search handleRequest={props.handleRequest} />
+      <button className={'button'} onClick={newError}>
+        Go Error
+      </button>
+    </header>
+  );
+};
 
 export default Header;

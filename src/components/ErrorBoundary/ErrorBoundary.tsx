@@ -4,6 +4,7 @@ import '../../App.css';
 
 interface ErrorBoundaryState {
   hasError: boolean;
+  textError: string;
 }
 
 interface ErrorBoundaryProps {
@@ -13,6 +14,7 @@ interface ErrorBoundaryProps {
 class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   state: ErrorBoundaryState = {
     hasError: false,
+    textError: '',
   };
 
   static getDerivedStateFromError() {
@@ -21,26 +23,28 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
   componentDidCatch(error: Error) {
     console.log(error.message);
+    this.setState({ textError: error.message });
   }
 
   render() {
     if (this.state.hasError) {
       return (
         <div className={classes.errorBoundary}>
-          <p>Error!</p>
-          <button
-            className={'button'}
-            onClick={() => {
-              this.setState({ hasError: false });
-            }}
-          >
-            OK
-          </button>
+          <div>
+            <p>{this.state.textError}</p>
+            <button
+              className={'button'}
+              onClick={() => {
+                this.setState({ hasError: false });
+              }}
+            >
+              Try again
+            </button>
+          </div>
         </div>
       );
     }
     return this.props.children;
   }
 }
-
 export default ErrorBoundary;
