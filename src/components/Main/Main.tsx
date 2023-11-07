@@ -1,9 +1,13 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import classes from './Main.module.css';
 import MainItem from './MainItem/MainItem';
+import { useNavigate } from 'react-router-dom';
 
 interface MainProps {
   results: Character[];
+  page: number;
+  setIsDetails: (state: boolean) => void;
+  isDetails: boolean;
 }
 interface Character {
   imageUrl: string;
@@ -14,37 +18,35 @@ interface Character {
 }
 
 const Main: FC<MainProps> = (props) => {
-  const [data, setData] = useState<Character>({
-    films: [],
-    name: '',
-    imageUrl: '',
-    _id: 0,
-    tvShow: [],
-  });
-  function fetchCharacter(id: number) {
-    fetch(`https://api.disneyapi.dev/character/${id}`)
-      .then((res) => res.json())
-      .then((result) => {
-        console.log(result);
-        setData({
-          films: result.data.films,
-          name: result.data.name,
-          imageUrl: result.data.imageUrl,
-          _id: result.data._id,
-          tvShow: result.data.tvShow,
-        });
-      });
-    console.log(data);
-  }
+  const navigate = useNavigate();
+  const goBack = (path: string) => {
+    navigate(path);
+  };
   return (
-    <div className={classes.main}>
-      {props.results.map((item) => (
+    <div
+      className={classes.main}
+      onClick={() => {
+        if (props.isDetails) {
+          props.setIsDetails(false);
+          goBack(`/?page=${props.page}`);
+        }
+      }}
+    >
+      {Array.isArray(props.results) ? (
+        props.results.map((item) => (
+          <MainItem
+            setIsDetails={props.setIsDetails}
+            key={item._id}
+            item={item}
+          ></MainItem>
+        ))
+      ) : (
         <MainItem
-          key={item._id}
-          fetchCharacter={fetchCharacter}
-          item={item}
+          setIsDetails={props.setIsDetails}
+          key={props.results}
+          item={props.results}
         ></MainItem>
-      ))}
+      )}
     </div>
   );
 };

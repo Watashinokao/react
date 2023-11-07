@@ -1,0 +1,34 @@
+.details{
+    color: #ffdce2;
+    font-size: 40px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 154, 172, 0.83);
+    min-width: 40%;
+    text-align: center;
+    background-color: #252525;
+    padding: 5px;
+
+}
+.container{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: center;
+}
+.remove{
+    padding: 5px;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    background-color: transparent;
+
+}
+.remove:hover{
+    border: 2px solid #ff9aac;
+    scale: 1.1;
+    background-color: #414141;
+
+}
+.img{
+    min-width: 90%;
+    min-height: 300px;
+}

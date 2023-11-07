@@ -1,12 +1,13 @@
 .name {
-  font-size: 30px;
-  border-bottom: 1px solid #ffdce2;
+  font-size: 20px;
 }
 
 .mainItem {
-  width: 30%;
+  border-radius: 20px;
+  width: 20%;
+  min-height: 200px;
   background-color: #252525;
-  color: #ffdce2;
+  color: #4f4f4f;
   padding: 10px;
   display: flex;
   flex-direction: column;
@@ -17,12 +18,14 @@
   font-size: 20px;
 }
 .img{
-  width: 200px;
-  height: 200px;
+  min-width: 90%;
+  min-height: 100px;
 }
 
 .mainItem:hover {
-  background-color: #414141;
-  color: #252525;
+  color: #ffdce2;
+  scale: 1.1;
+  background-color: #4f4f4f;
+
   cursor: pointer;
 }

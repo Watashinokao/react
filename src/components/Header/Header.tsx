@@ -1,8 +1,7 @@
 import React, { FC, useState } from 'react';
 import Search from './Search/Search';
 import classes from './Header.module.css';
-import '../../App.css';
-
+import '../RootLayout/RootLayout.module.css';
 interface HeaderProps {
   handleRequest: (request: string) => void;
 }

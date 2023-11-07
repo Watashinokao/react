@@ -1,9 +1,10 @@
 import React, { FC } from 'react';
 import classes from './MainItem.module.css';
+import { NavLink } from 'react-router-dom';
 
 interface MainItemProps {
   item: Character;
-  fetchCharacter: (id: number) => void;
+  setIsDetails: (state: boolean) => void;
 }
 interface Character {
   films: string[];
@@ -14,9 +15,10 @@ interface Character {
 
 const MainItem: FC<MainItemProps> = (props) => {
   return (
-    <div
+    <NavLink
+      to={`details/${props.item._id}`}
       className={classes.mainItem}
-      onClick={() => props.fetchCharacter(props.item._id)}
+      onClick={() => props.setIsDetails(true)}
     >
       <div
         className={classes.img}
@@ -26,7 +28,7 @@ const MainItem: FC<MainItemProps> = (props) => {
         }}
       ></div>
       <p className={classes.name}>{props.item.name}</p>
-    </div>
+    </NavLink>
   );
 };
 

@@ -1,27 +1,32 @@
 import React, { FC } from 'react';
-
-interface PaginationProps {
-  page: number;
-  handlePage: (page: string) => void;
-  handlePageSize: (size: number) => void;
-  info: {
-    count: number;
-    nextPage: string;
-    previousPage: string;
-    totalPages: number;
-  };
-}
+import { PaginationProps } from '../../Interfaces/Interfaces';
 const Pagination: FC<PaginationProps> = (props) => {
   return (
     <div className={'pagination'}>
-      <button onClick={() => props.handlePage('prev')}>Prev</button>
+      <button
+        onClick={() => props.handlePage('prev')}
+        disabled={props.page <= 1}
+      >
+        Prev
+      </button>
       <div>{props.page}</div>
-      <button onClick={() => props.handlePage('next')}>Next</button>
-      <p>Count element:</p>
-      <button onClick={() => props.handlePageSize(5)}>5</button>
-      <button onClick={() => props.handlePageSize(10)}>10</button>
-      <button onClick={() => props.handlePageSize(20)}>20</button>
-      <button onClick={() => props.handlePageSize(30)}>30</button>
+      <button
+        onClick={() => props.handlePage('next')}
+        disabled={props.page >= props.info.totalPages}
+      >
+        Next
+      </button>
+      <p>Elements quantity:</p>
+      <select
+        value={props.pageSize}
+        className="select"
+        onChange={(e) => props.handlePageSize(Number(e.target.value))}
+      >
+        <option>5</option>
+        <option>10</option>
+        <option>15</option>
+        <option>20</option>
+      </select>
     </div>
   );
 };

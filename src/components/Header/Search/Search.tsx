@@ -1,10 +1,7 @@
 import React, { FC, useState } from 'react';
 import classes from './Search.module.css';
-import '../../../App.css';
-
-interface SearchProps {
-  handleRequest: (request: string) => void;
-}
+import '../../../index.css';
+import { SearchProps } from '../../../Interfaces/Interfaces';
 
 const Search: FC<SearchProps> = (props) => {
   const [request, setRequest] = useState(
@@ -22,7 +19,7 @@ const Search: FC<SearchProps> = (props) => {
         className={classes.input}
         type={'text'}
         value={request}
-        placeholder={'your planet... (Naboo, Hoth and other)'}
+        placeholder={'your request...queen, belle and other'}
         onChange={handleChange}
       />
       <button onClick={() => props.handleRequest(request)} className={'button'}>
