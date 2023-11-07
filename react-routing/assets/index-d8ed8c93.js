@@ -11452,7 +11452,7 @@ const Sv = "_details_52pu6_1",
                 className: ml.remove,
                 title: "I wish you a New Year's mood",
                 onClick: () => {
-                  n.handleDetails(), r(`/?page=${n.page}`);
+                  n.handleDetails(), r(`/react/react-routing/?page=${n.page}`);
                 },
                 children: T.jsx("img", {
                   src: "assets/close.svg",
@@ -11578,7 +11578,7 @@ const Pv = "_search_5u5qe_1",
     return T.jsx("div", {
       className: Mv.main,
       onClick: () => {
-        e.isDetails && (e.setIsDetails(!1), n(`/?page=${e.page}`));
+        e.isDetails && (e.setIsDetails(!1), n(`/react/react-routing/?page=${e.page}`));
       },
       children: Array.isArray(e.results)
         ? e.results.map((r) =>
@@ -11727,9 +11727,9 @@ class cd extends x.Component {
 const Bv = pv(
     bl(
       T.jsx(qi, {
-        path: "/",
+        path: "/react/react-routing/",
         element: T.jsx(cd, { children: T.jsx(Uv, {}) }),
-        children: T.jsx(qi, { path: "/details/:id", element: T.jsx(Cv, {}) }),
+        children: T.jsx(qi, { path: "details/:id", element: T.jsx(Cv, {}) }),
       }),
     ),
   ),
