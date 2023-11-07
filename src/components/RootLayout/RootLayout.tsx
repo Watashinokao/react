@@ -6,16 +6,16 @@ import Header from '../Header/Header';
 import Pagination from '../Pagination/Pagination';
 import Main from '../Main/Main';
 import { MainProps } from '../../Interfaces/Interfaces';
-import { Outlet, useParams, useSearchParams } from 'react-router-dom';
+import { Outlet, useSearchParams } from 'react-router-dom';
 
 const RootLayout: FC = () => {
-  const [isDetails, setIsDetails] = useState(useParams().id != undefined);
-
+  const [isDetails, setIsDetails] = useState(false);
   const [request, setRequest] = useState<string>('');
   const [error, setError] = useState<boolean>(false);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [pageSize, setPageSize] = useState<number>(10);
   const [page, setPage] = useState<number>(1);
+  const [, setSearch] = useSearchParams();
   const [results, setResults] = useState<MainProps>({
     data: [],
     info: {
@@ -26,18 +26,6 @@ const RootLayout: FC = () => {
     },
   });
 
-  const [, setSearch] = useSearchParams();
-
-  useEffect(() => {
-    const prevRequest = localStorage.getItem('prevRequest');
-    setRequest(prevRequest || '');
-    setIsLoaded(false);
-    setSearch({
-      page: `${page}`,
-    });
-    fetchRequest(prevRequest || '', page, pageSize);
-  }, [request, page, pageSize, setSearch]);
-
   function fetchRequest(request: string, page: number, pageSize: number) {
     fetch(
       `https://api.disneyapi.dev/character?name=${request}&page=${page}&pageSize=${pageSize}`
@@ -45,7 +33,6 @@ const RootLayout: FC = () => {
       .then((res) => res.json())
       .then((result: MainProps) => {
         const { info, data } = result;
-        console.log('main');
         setResults({
           data: data,
           info: {
@@ -68,6 +55,17 @@ const RootLayout: FC = () => {
         setError(true);
       });
   }
+  useEffect(() => {
+    setSearch({
+      page: `${page}`,
+    });
+    const prevRequest = localStorage.getItem('prevRequest');
+    setIsLoaded(false);
+
+    setRequest(prevRequest || '');
+    fetchRequest(prevRequest || '', page, pageSize);
+  }, [request, page, pageSize]); // eslint-disable-line react-hooks/exhaustive-deps
+
   function handlePage(page: string) {
     switch (page) {
       case 'next':

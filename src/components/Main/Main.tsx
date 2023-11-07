@@ -35,6 +35,7 @@ const Main: FC<MainProps> = (props) => {
       {Array.isArray(props.results) ? (
         props.results.map((item) => (
           <MainItem
+            page={props.page}
             setIsDetails={props.setIsDetails}
             key={item._id}
             item={item}
@@ -42,6 +43,7 @@ const Main: FC<MainProps> = (props) => {
         ))
       ) : (
         <MainItem
+          page={props.page}
           setIsDetails={props.setIsDetails}
           key={props.results}
           item={props.results}

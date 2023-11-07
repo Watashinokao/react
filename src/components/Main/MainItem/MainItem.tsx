@@ -3,6 +3,7 @@ import classes from './MainItem.module.css';
 import { NavLink } from 'react-router-dom';
 
 interface MainItemProps {
+  page: number;
   item: Character;
   setIsDetails: (state: boolean) => void;
 }
@@ -16,7 +17,7 @@ interface Character {
 const MainItem: FC<MainItemProps> = (props) => {
   return (
     <NavLink
-      to={`details/${props.item._id}`}
+      to={`details/${props.item._id}?page=${props.page}`}
       className={classes.mainItem}
       onClick={() => props.setIsDetails(true)}
     >

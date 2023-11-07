@@ -1,11 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import classes from './Details.module.css';
-import {
-  useNavigate,
-  useOutletContext,
-  useParams,
-  useSearchParams,
-} from 'react-router-dom';
+import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import { Character } from '../../Interfaces/Interfaces';
 import { ContextType } from '../../Interfaces/Interfaces';
 
@@ -13,12 +8,8 @@ const Details: FC = () => {
   const [isLoaded, setIsLoaded] = useState<boolean>(true);
   const context = useOutletContext<ContextType>();
   const navigate = useNavigate();
-  const goBack = (path: string) => {
-    navigate(path);
-  };
-  const { id } = useParams();
-  const [, setSearch] = useSearchParams();
 
+  const { id } = useParams();
   const [data, setData] = useState<Character>({
     films: [],
     name: '',
@@ -32,10 +23,7 @@ const Details: FC = () => {
       setData(res);
       setIsLoaded(false);
     });
-    setSearch({
-      page: `${context.page}`,
-    });
-  }, [id, context.page, setSearch]);
+  }, [id]);
   function detailsLoader(id: string | undefined) {
     return fetch(`https://api.disneyapi.dev/character/${id}`)
       .then((res) => res.json())
@@ -58,11 +46,11 @@ const Details: FC = () => {
       ) : (
         <div className={classes.container}>
           <button
-            title={`I wish you a New Year's mood`}
             className={classes.remove}
+            title={`I wish you a New Year's mood`}
             onClick={() => {
               context.handleDetails();
-              goBack(`/?page=${context.page}`);
+              navigate(`/?page=${context.page}`);
             }}
           >
             <img src="../src/assets/close.svg" alt="close details" />
