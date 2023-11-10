@@ -1,28 +1,32 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import classes from './Search.module.css';
 import '../../../index.css';
-import { SearchProps } from '../../../Interfaces/Interfaces';
+import { RequestContext } from '../../../Interfaces/Interfaces';
 
-const Search: FC<SearchProps> = (props) => {
-  const [request, setRequest] = useState(
-    localStorage.getItem('prevRequest') || ''
-  );
+const Search: FC = () => {
+  const { request, setRequest } = useContext(RequestContext);
+  const [newRequest, setNewRequest] = useState(request || '');
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setRequest(e.target.value);
+    setNewRequest(e.target.value);
   }
-
   return (
     <div className={classes.search}>
       <input
         autoFocus={true}
         className={classes.input}
         type={'text'}
-        value={request}
+        value={newRequest}
         placeholder={'your request...queen, belle and other'}
         onChange={handleChange}
       />
-      <button onClick={() => props.handleRequest(request)} className={'button'}>
+      <button
+        onClick={() => {
+          setRequest(newRequest);
+          localStorage.setItem('prevRequest', newRequest.trim());
+        }}
+        className={'button'}
+      >
         Search
       </button>
     </div>

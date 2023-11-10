@@ -1,6 +1,7 @@
-import React, { FC } from 'react';
-import { PaginationProps } from '../../Interfaces/Interfaces';
+import React, { FC, useContext } from 'react';
+import { PaginationProps, ResultsContext } from '../../Interfaces/Interfaces';
 const Pagination: FC<PaginationProps> = (props) => {
+  const { results } = useContext(ResultsContext);
   return (
     <div className={'pagination'}>
       <button
@@ -12,7 +13,7 @@ const Pagination: FC<PaginationProps> = (props) => {
       <div>{props.page}</div>
       <button
         onClick={() => props.handlePage('next')}
-        disabled={props.page >= props.info.totalPages}
+        disabled={props.page >= results.info.totalPages}
       >
         Next
       </button>

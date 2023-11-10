@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import {
   RouterProvider,
   createBrowserRouter,
@@ -8,25 +8,48 @@ import {
 import Details from './components/Details/Details';
 import RootLayout from './components/RootLayout/RootLayout';
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
+import Error from './components/Error/Error';
+import {
+  RequestContext,
+  Results,
+  ResultsContext,
+} from './Interfaces/Interfaces';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route
-      path="/"
-      element={
-        <ErrorBoundary>
-          <RootLayout />
-        </ErrorBoundary>
-      }
-    >
-      <Route path="/details/:id" element={<Details />}></Route>
+    <Route path="/">
+      <Route
+        path="/"
+        element={
+          <ErrorBoundary>
+            <RootLayout />
+          </ErrorBoundary>
+        }
+      >
+        <Route path="/details/:id" element={<Details />}></Route>
+      </Route>
+      <Route path="*" element={<Error />}></Route>
     </Route>
   )
 );
 const App: FC = () => {
+  const [request, setRequest] = useState(localStorage.getItem('prevRequest'));
+  const [results, setResults] = useState<Results>({
+    data: [],
+    info: {
+      count: 0,
+      nextPage: '',
+      previousPage: '',
+      totalPages: 0,
+    },
+  });
   return (
     <>
-      <RouterProvider router={router} />
+      <ResultsContext.Provider value={{ results, setResults }}>
+        <RequestContext.Provider value={{ request, setRequest }}>
+          <RouterProvider router={router} />
+        </RequestContext.Provider>
+      </ResultsContext.Provider>
     </>
   );
 };

@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, Dispatch, SetStateAction, createContext } from 'react';
 
 export interface Character {
   imageUrl: string;
@@ -7,7 +7,31 @@ export interface Character {
   films: string[];
   tvShow: string[];
 }
-export interface MainProps {
+
+export interface ContextOutlet {
+  handleDetails: () => void;
+  page: number;
+}
+
+export interface PaginationProps {
+  pageSize: number;
+  page: number;
+  handlePage: (page: string) => void;
+  handlePageSize: (size: number) => void;
+}
+export interface ErrorBoundaryState {
+  hasError: boolean;
+  textError: string;
+}
+export interface ErrorBoundaryProps {
+  children: ReactNode;
+}
+
+export interface ContextRequest {
+  request: string | null;
+  setRequest: Dispatch<SetStateAction<string | null>>;
+}
+export interface Results {
   data: Character[];
   info: {
     count: number;
@@ -16,30 +40,39 @@ export interface MainProps {
     totalPages: number;
   };
 }
-export interface ContextType {
-  handleDetails: () => void;
-  page: number;
-}
-export interface SearchProps {
-  handleRequest: (request: string) => void;
-}
-export interface PaginationProps {
-  pageSize: number;
-  page: number;
-  handlePage: (page: string) => void;
-  handlePageSize: (size: number) => void;
-  info: {
-    count: number;
-    nextPage: string;
-    previousPage: string;
-    totalPages: number;
+export interface ContextResults {
+  results: {
+    data: Character[];
+    info: {
+      count: number;
+      nextPage: string;
+      previousPage: string;
+      totalPages: number;
+    };
   };
-}
-export interface ErrorBoundaryState {
-  hasError: boolean;
-  textError: string;
+  setResults: Dispatch<
+    SetStateAction<{
+      data: Character[];
+      info: {
+        count: number;
+        nextPage: string;
+        previousPage: string;
+        totalPages: number;
+      };
+    }>
+  >;
 }
 
-export interface ErrorBoundaryProps {
-  children: ReactNode;
-}
+export const RequestContext = createContext({} as ContextRequest);
+export const ResultsContext = createContext<ContextResults>({
+  results: {
+    data: [],
+    info: {
+      count: 0,
+      nextPage: '',
+      previousPage: '',
+      totalPages: 0,
+    },
+  },
+  setResults: (prevState: SetStateAction<Results>) => prevState,
+});

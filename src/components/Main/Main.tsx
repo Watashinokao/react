@@ -1,23 +1,17 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 import classes from './Main.module.css';
 import MainItem from './MainItem/MainItem';
 import { useNavigate } from 'react-router-dom';
+import { ResultsContext } from '../../Interfaces/Interfaces';
 
 interface MainProps {
-  results: Character[];
   page: number;
   setIsDetails: (state: boolean) => void;
   isDetails: boolean;
 }
-interface Character {
-  imageUrl: string;
-  name: string;
-  _id: number;
-  films: string[];
-  tvShow: string[];
-}
 
 const Main: FC<MainProps> = (props) => {
+  const { results } = useContext(ResultsContext);
   const navigate = useNavigate();
   const goBack = (path: string) => {
     navigate(path);
@@ -32,8 +26,8 @@ const Main: FC<MainProps> = (props) => {
         }
       }}
     >
-      {Array.isArray(props.results) ? (
-        props.results.map((item) => (
+      {Array.isArray(results.data) ? (
+        results.data.map((item) => (
           <MainItem
             page={props.page}
             setIsDetails={props.setIsDetails}
@@ -45,8 +39,8 @@ const Main: FC<MainProps> = (props) => {
         <MainItem
           page={props.page}
           setIsDetails={props.setIsDetails}
-          key={props.results}
-          item={props.results}
+          key={results.data}
+          item={results.data}
         ></MainItem>
       )}
     </div>

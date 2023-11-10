@@ -2,11 +2,11 @@ import React, { FC, useEffect, useState } from 'react';
 import classes from './Details.module.css';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import { Character } from '../../Interfaces/Interfaces';
-import { ContextType } from '../../Interfaces/Interfaces';
+import { ContextOutlet } from '../../Interfaces/Interfaces';
 
 const Details: FC = () => {
   const [isLoaded, setIsLoaded] = useState<boolean>(true);
-  const context = useOutletContext<ContextType>();
+  const context = useOutletContext<ContextOutlet>();
   const navigate = useNavigate();
 
   const { id } = useParams();
