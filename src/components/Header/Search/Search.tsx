@@ -21,6 +21,7 @@ const Search: FC = () => {
         onChange={handleChange}
       />
       <button
+        data-testid="search-btn"
         onClick={() => {
           setRequest(newRequest);
           localStorage.setItem('prevRequest', newRequest.trim());

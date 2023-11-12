@@ -13,18 +13,19 @@ import {
 } from '../../Interfaces/Interfaces';
 
 const RootLayout: FC = () => {
-  const { request } = useContext(RequestContext);
+  const { request, setRequest } = useContext(RequestContext);
   const { setResults } = useContext(ResultsContext);
   const [isDetails, setIsDetails] = useState(false);
   const [error, setError] = useState<boolean>(false);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [pageSize, setPageSize] = useState<number>(10);
   const [page, setPage] = useState<number>(
-    Number(useSearchParams()[0].get('page'))
+    Number(useSearchParams()[0].get('page') || 1)
   );
   const [, setSearch] = useSearchParams();
 
   function fetchRequest(request: string, page: number, pageSize: number) {
+    console.log(request);
     fetch(
       `https://api.disneyapi.dev/character?name=${request}&page=${page}&pageSize=${pageSize}`
     )
@@ -43,8 +44,9 @@ const RootLayout: FC = () => {
 
         setIsLoaded(true);
         setError(false);
-        if (result.info.count === 0) {
+        if (info.count === 0) {
           setError(true);
+          setRequest('');
           localStorage.setItem('prevRequest', '');
         }
       })

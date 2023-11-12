@@ -40,7 +40,7 @@ const Details: FC = () => {
   }
 
   return (
-    <div className={classes.details}>
+    <div className={classes.details} data-testid="details">
       {isLoaded ? (
         <p>Loading...</p>
       ) : (

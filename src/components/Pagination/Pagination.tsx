@@ -10,7 +10,7 @@ const Pagination: FC<PaginationProps> = (props) => {
       >
         Prev
       </button>
-      <div>{props.page}</div>
+      <div data-testid={'current-page'}>{props.page}</div>
       <button
         onClick={() => props.handlePage('next')}
         disabled={props.page >= results.info.totalPages}
