@@ -24,7 +24,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   render() {
     if (this.state.hasError) {
       return (
-        <div className={classes.errorBoundary}>
+        <div className={classes.errorBoundary} data-testid="error-request">
           <div>
             <p>{this.state.textError}</p>
             <button

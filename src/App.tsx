@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, ReactNode, useState } from 'react';
 import {
   RouterProvider,
   createBrowserRouter,
@@ -32,7 +32,10 @@ const router = createBrowserRouter(
     </Route>
   )
 );
-const App: FC = () => {
+interface appProps {
+  children?: ReactNode;
+}
+const App: FC<appProps> = ({ children }) => {
   const [request, setRequest] = useState(localStorage.getItem('prevRequest'));
   const [results, setResults] = useState<Results>({
     data: [],
@@ -50,6 +53,7 @@ const App: FC = () => {
           <RouterProvider router={router} />
         </RequestContext.Provider>
       </ResultsContext.Provider>
+      {children}
     </>
   );
 };

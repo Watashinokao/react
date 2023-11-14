@@ -30,8 +30,8 @@ const Details: FC = () => {
       .then((result): Character => {
         const { data } = result;
         return {
-          films: data.films,
           tvShow: data.tvShow,
+          films: data.films,
           imageUrl: data.imageUrl,
           _id: data.id,
           name: data.name,
@@ -46,6 +46,7 @@ const Details: FC = () => {
       ) : (
         <div className={classes.container}>
           <button
+            data-testid="closeBtn"
             className={classes.remove}
             title={`I wish you a New Year's mood`}
             onClick={() => {
@@ -56,6 +57,7 @@ const Details: FC = () => {
             <img src="../src/assets/close.svg" alt="close details" />
           </button>
           <div
+            data-testid="detailsBackground"
             className={classes.img}
             style={{
               background: `center no-repeat url(${data.imageUrl} )`,
