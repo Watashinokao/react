@@ -13,8 +13,8 @@ import {
 } from '../../Interfaces/Interfaces';
 
 const RootLayout: FC = () => {
-  const { request, setRequest } = useContext(RequestContext);
-  const { setResults } = useContext(ResultsContext);
+  const { request } = useContext(RequestContext);
+  const { results, setResults } = useContext(ResultsContext);
   const [isDetails, setIsDetails] = useState(false);
   const [error, setError] = useState<boolean>(false);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
@@ -25,7 +25,6 @@ const RootLayout: FC = () => {
   const [, setSearch] = useSearchParams();
 
   function fetchRequest(request: string, page: number, pageSize: number) {
-    console.log(request);
     fetch(
       `https://api.disneyapi.dev/character?name=${request}&page=${page}&pageSize=${pageSize}`
     )
@@ -43,12 +42,6 @@ const RootLayout: FC = () => {
         });
 
         setIsLoaded(true);
-        setError(false);
-        if (info.count === 0) {
-          setError(true);
-          setRequest('');
-          localStorage.setItem('prevRequest', '');
-        }
       })
       .catch(() => {
         setIsLoaded(true);
@@ -82,9 +75,8 @@ const RootLayout: FC = () => {
     setIsDetails(false);
   }
   if (error) {
-    throw new Error('Request not found');
+    throw new Error('Error server');
   }
-
   return (
     <div className={'app'}>
       <Header />
@@ -94,7 +86,7 @@ const RootLayout: FC = () => {
           src="/src/assets/loading.gif"
           alt={'loading'}
         />
-      ) : (
+      ) : results.info.count ? (
         <>
           <Pagination
             handlePage={handlePage}
@@ -111,6 +103,8 @@ const RootLayout: FC = () => {
             <Outlet context={{ handleDetails, page }}></Outlet>
           </div>
         </>
+      ) : (
+        <p>Request not found</p>
       )}
     </div>
   );

@@ -1,5 +1,8 @@
 import { ReactNode, Dispatch, SetStateAction, createContext } from 'react';
 
+export interface MockCharacter {
+  data: Character;
+}
 export interface Character {
   imageUrl: string;
   name: string;

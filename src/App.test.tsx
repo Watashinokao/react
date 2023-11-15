@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import Header from './components/Header/Header';
+import { expect } from 'vitest';
 
-window.location = location;
 describe('test App', () => {
-  test('test Header', () => {
+  test('test Header', async () => {
     render(<Header />);
     const input = screen.getByPlaceholderText(/request/i);
     const searchBtn = screen.getByRole('button', { name: /search/i });

@@ -26,7 +26,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
       return (
         <div className={classes.errorBoundary} data-testid="error-request">
           <div>
-            <p>{this.state.textError}</p>
+            <p data-testid="error-text">{this.state.textError}</p>
             <button
               className={'button'}
               onClick={() => {

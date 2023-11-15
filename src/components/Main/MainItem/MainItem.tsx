@@ -18,11 +18,12 @@ const MainItem: FC<MainItemProps> = (props) => {
   return (
     <NavLink
       data-testid="character"
-      to={`details/${props.item._id}?page=${props.page}`}
+      to={`/details/${props.item._id}?page=${props.page}`}
       className={classes.mainItem}
       onClick={() => props.setIsDetails(true)}
     >
       <div
+        data-testid="background"
         className={classes.img}
         style={{
           background: `center no-repeat url(${props.item.imageUrl} )`,
