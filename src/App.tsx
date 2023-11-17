@@ -14,7 +14,6 @@ import {
   Results,
   ResultsContext,
 } from './Interfaces/Interfaces';
-
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/">
@@ -32,6 +31,7 @@ const router = createBrowserRouter(
     </Route>
   )
 );
+
 interface appProps {
   children?: ReactNode;
 }
