@@ -1,5 +1,33 @@
 import { ReactNode, Dispatch, SetStateAction, createContext } from 'react';
 
+export interface Results {
+  data: Character[];
+  info: {
+    count: number;
+    nextPage: string;
+    previousPage: string;
+    totalPages: number;
+  };
+}
+export interface ResultsAPI {
+  data: Character[];
+  info: {
+    count: number;
+    nextPage: string;
+    previousPage: string;
+    totalPages: number;
+  };
+}
+export interface CharacterAPI {
+  data: Character;
+  info: {
+    count: number;
+    nextPage: string;
+    previousPage: string;
+    totalPages: number;
+  };
+}
+
 export interface MockCharacter {
   data: Character;
 }
@@ -34,15 +62,7 @@ export interface ContextRequest {
   request: string | null;
   setRequest: Dispatch<SetStateAction<string | null>>;
 }
-export interface Results {
-  data: Character[];
-  info: {
-    count: number;
-    nextPage: string;
-    previousPage: string;
-    totalPages: number;
-  };
-}
+
 export interface ContextResults {
   results: {
     data: Character[];

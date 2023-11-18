@@ -1,12 +1,16 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import characterReducer from './redusers/CharactersSlice';
+import dataReducer from './redusers/dataSlice';
+import { charactersAPI } from '../services/CharactersService';
 const rootReducer = combineReducers({
-  characterReducer,
+  dataReducer,
+  [charactersAPI.reducerPath]: charactersAPI.reducer,
 });
 
 export const setupStore = () => {
   return configureStore({
     reducer: rootReducer,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().concat(charactersAPI.middleware),
   });
 };
 export type RootState = ReturnType<typeof rootReducer>;
