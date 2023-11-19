@@ -7,32 +7,25 @@ import Pagination from '../Pagination/Pagination';
 import Main from '../Main/Main';
 import { Outlet, useSearchParams } from 'react-router-dom';
 
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { dataSlice } from '../../store/redusers/dataSlice';
+import { useAppSelector } from '../../hooks/redux';
 import { charactersAPI } from '../../services/CharactersService';
 
 const RootLayout: FC = () => {
-  const dispatch = useAppDispatch();
-
-  const { setIsLoadingCards } = dataSlice.actions;
   const { page, pageSize, isDetails, request, isLoadingCards } = useAppSelector(
     (state) => state.dataReducer
   );
-  const { data, isError, isFetching } =
-    charactersAPI.useFetchAllCharactersQuery({
-      name: `${request}`,
-      page: `${page}`,
-      pageSize: `${pageSize}`,
-    });
-
-  dispatch(setIsLoadingCards(isFetching));
+  const { data, isError } = charactersAPI.useFetchAllCharactersQuery({
+    name: `${request}`,
+    page: `${page}`,
+    pageSize: `${pageSize}`,
+  });
   const [, setSearch] = useSearchParams();
 
   useEffect(() => {
     setSearch({
       page: `${page}`,
     });
-  }, [page]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (isError) {
     throw new Error('Error server');

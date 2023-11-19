@@ -5,7 +5,6 @@ import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import { Provider } from 'react-redux';
 import { setupStore } from './store/store';
 import { RouterProvider } from 'react-router-dom';
-
 import { router } from './router';
 const store = setupStore();
 

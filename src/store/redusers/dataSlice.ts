@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { dataState } from '../../Interfaces/Interfaces';
+import { charactersAPI } from '../../services/CharactersService';
 
 const initialState: dataState = {
   request: localStorage.getItem('prevRequest') || '',
@@ -31,12 +32,42 @@ export const dataSlice = createSlice({
     setIsDetails: (state, action: PayloadAction<boolean>) => {
       state.isDetails = action.payload;
     },
-    setIsLoadingDetails: (state, action: PayloadAction<boolean>) => {
-      state.isLoadingDetails = action.payload;
-    },
-    setIsLoadingCards: (state, action: PayloadAction<boolean>) => {
-      state.isLoadingCards = action.payload;
-    },
+    // setIsLoadingDetails: (state, action: PayloadAction<boolean>) => {
+    //   state.isLoadingDetails = action.payload;
+    // },
+    // setIsLoadingCards: (state, action: PayloadAction<boolean>) => {
+    //   state.isLoadingCards = action.payload;
+    // },
+  },
+  extraReducers: (builder) => {
+    builder.addMatcher(
+      charactersAPI.endpoints.fetchAllCharacters.matchPending,
+      (state, {}) => {
+        state.isLoadingCards = true;
+      }
+    );
+    builder.addMatcher(
+      charactersAPI.endpoints.fetchAllCharacters.matchFulfilled,
+      (state, { payload }) => {
+        if (payload.data) {
+          state.isLoadingCards = false;
+        }
+      }
+    );
+    builder.addMatcher(
+      charactersAPI.endpoints.fetchCharacterById.matchPending,
+      (state, {}) => {
+        state.isLoadingDetails = true;
+      }
+    );
+    builder.addMatcher(
+      charactersAPI.endpoints.fetchCharacterById.matchFulfilled,
+      (state, { payload }) => {
+        if (payload.data) {
+          state.isLoadingDetails = false;
+        }
+      }
+    );
   },
 });
 
