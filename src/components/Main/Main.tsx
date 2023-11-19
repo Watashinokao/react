@@ -1,17 +1,16 @@
-import React, { FC, useContext } from 'react';
+import React, { FC } from 'react';
 import classes from './Main.module.css';
 import MainItem from './MainItem/MainItem';
 import { useNavigate } from 'react-router-dom';
-import { ResultsContext } from '../../Interfaces/Interfaces';
-
-interface MainProps {
-  page: number;
-  setIsDetails: (state: boolean) => void;
-  isDetails: boolean;
-}
+import { MainProps } from '../../Interfaces/Interfaces';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { dataSlice } from '../../store/redusers/dataSlice';
 
 const Main: FC<MainProps> = (props) => {
-  const { results } = useContext(ResultsContext);
+  const { page, isDetails } = useAppSelector((state) => state.dataReducer);
+  const dispatch = useAppDispatch();
+  const { setIsDetails } = dataSlice.actions;
+  // const { results } = useContext(ResultsContext);
   const navigate = useNavigate();
   const goBack = (path: string) => {
     navigate(path);
@@ -20,27 +19,27 @@ const Main: FC<MainProps> = (props) => {
     <div
       className={classes.main}
       onClick={() => {
-        if (props.isDetails) {
-          props.setIsDetails(false);
-          goBack(`/?page=${props.page}`);
+        if (isDetails) {
+          dispatch(setIsDetails(false));
+          goBack(`/?page=${page}`);
         }
       }}
     >
-      {Array.isArray(results.data) ? (
-        results.data.map((item) => (
+      {Array.isArray(props.results) ? (
+        props.results.map((item) => (
           <MainItem
-            page={props.page}
-            setIsDetails={props.setIsDetails}
+            // page={props.page}
+            // setIsDetails={props.setIsDetails}
             key={item._id}
             item={item}
           ></MainItem>
         ))
       ) : (
         <MainItem
-          page={props.page}
-          setIsDetails={props.setIsDetails}
-          key={results.data}
-          item={results.data}
+          // page={props.page}
+          // setIsDetails={props.setIsDetails}
+          key={props.results._id}
+          item={props.results}
         ></MainItem>
       )}
     </div>

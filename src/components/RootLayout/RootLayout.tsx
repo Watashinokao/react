@@ -1,106 +1,57 @@
 import './RootLayout.module.css';
 import '../../index.css';
-import React, { FC, useContext, useEffect, useState } from 'react';
+import React, { FC, useEffect } from 'react';
 
 import Header from '../Header/Header';
 import Pagination from '../Pagination/Pagination';
 import Main from '../Main/Main';
 import { Outlet, useSearchParams } from 'react-router-dom';
-import {
-  RequestContext,
-  Results,
-  ResultsContext,
-} from '../../Interfaces/Interfaces';
+
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { dataSlice } from '../../store/redusers/dataSlice';
+import { charactersAPI } from '../../services/CharactersService';
 
 const RootLayout: FC = () => {
-  const { request } = useContext(RequestContext);
-  const { results, setResults } = useContext(ResultsContext);
-  const [isDetails, setIsDetails] = useState(false);
-  const [error, setError] = useState<boolean>(false);
-  const [isLoaded, setIsLoaded] = useState<boolean>(false);
-  const [pageSize, setPageSize] = useState<number>(10);
-  const [page, setPage] = useState<number>(
-    Number(useSearchParams()[0].get('page') || 1)
+  const dispatch = useAppDispatch();
+
+  const { setIsLoadingCards } = dataSlice.actions;
+  const { page, pageSize, isDetails, request, isLoadingCards } = useAppSelector(
+    (state) => state.dataReducer
   );
+  const { data, isError, isFetching } =
+    charactersAPI.useFetchAllCharactersQuery({
+      name: `${request}`,
+      page: `${page}`,
+      pageSize: `${pageSize}`,
+    });
+
+  dispatch(setIsLoadingCards(isFetching));
   const [, setSearch] = useSearchParams();
 
-  function fetchRequest(request: string, page: number, pageSize: number) {
-    fetch(
-      `https://api.disneyapi.dev/character?name=${request}&page=${page}&pageSize=${pageSize}`
-    )
-      .then((res) => res.json())
-      .then((result: Results) => {
-        const { info, data } = result;
-        setResults({
-          data: data,
-          info: {
-            count: info.count,
-            nextPage: info.nextPage,
-            previousPage: info.previousPage,
-            totalPages: info.totalPages,
-          },
-        });
-
-        setIsLoaded(true);
-      })
-      .catch(() => {
-        setIsLoaded(true);
-        setError(true);
-      });
-  }
   useEffect(() => {
     setSearch({
       page: `${page}`,
     });
-    const prevRequest = request;
-    setIsLoaded(false);
-    fetchRequest(prevRequest || '', page, pageSize);
-  }, [request, page, pageSize]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [page]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  function handlePage(page: string) {
-    switch (page) {
-      case 'next':
-        setPage((count) => count + 1);
-        break;
-      case 'prev':
-        setPage((count) => count - 1);
-        break;
-    }
-  }
-  function handlePageSize(size: number) {
-    setPageSize((count) => count + size - count);
-    setPage(1);
-  }
-  function handleDetails() {
-    setIsDetails(false);
-  }
-  if (error) {
+  if (isError) {
     throw new Error('Error server');
   }
   return (
     <div className={'app'}>
       <Header />
-      {!isLoaded ? (
+      {isLoadingCards ? (
         <img
           className={'loading'}
           src="/src/assets/loading.gif"
           alt={'loading'}
         />
-      ) : results.info.count ? (
+      ) : data && data.info.count ? (
         <>
-          <Pagination
-            handlePage={handlePage}
-            page={page}
-            pageSize={pageSize}
-            handlePageSize={handlePageSize}
-          />
+          <Pagination />
           <div className={isDetails ? 'open-details' : ''}>
-            <Main
-              setIsDetails={setIsDetails}
-              page={page}
-              isDetails={isDetails}
-            />
-            <Outlet context={{ handleDetails, page }}></Outlet>
+            <Main results={data.data} />
+            <Outlet />
           </div>
         </>
       ) : (

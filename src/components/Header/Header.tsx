@@ -2,7 +2,6 @@ import React, { FC, useState } from 'react';
 import Search from './Search/Search';
 import classes from './Header.module.css';
 import '../RootLayout/RootLayout.module.css';
-
 const Header: FC = () => {
   const [error, setError] = useState(false);
   const newError = () => {

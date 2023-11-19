@@ -1,16 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-interface dataState {
-  request: string;
-  page: string;
-  pageSize: string;
-  isDetails: boolean;
-  isLoadingDetails: boolean;
-  isLoadingCards: boolean;
-}
+import { dataState } from '../../Interfaces/Interfaces';
+
 const initialState: dataState = {
-  request: '',
-  page: '',
-  pageSize: '',
+  request: localStorage.getItem('prevRequest') || '',
+  page: window.location.search.at(-1) || '1',
+  pageSize: '10',
   isDetails: false,
   isLoadingDetails: false,
   isLoadingCards: false,
@@ -24,7 +18,12 @@ export const dataSlice = createSlice({
       state.request = action.payload;
     },
     setPage: (state, action: PayloadAction<string>) => {
-      state.page = action.payload;
+      if (action.payload === 'prev') {
+        state.page = String(Number(state.page) - 1);
+      }
+      if (action.payload === 'next') {
+        state.page = String(Number(state.page) + 1);
+      }
     },
     setPageSize: (state, action: PayloadAction<string>) => {
       state.pageSize = action.payload;

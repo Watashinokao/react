@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
 import classes from './MainItem.module.css';
 import { NavLink } from 'react-router-dom';
+import { dataSlice } from '../../../store/redusers/dataSlice';
+import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
 
 interface MainItemProps {
-  page: number;
   item: Character;
-  setIsDetails: (state: boolean) => void;
 }
 interface Character {
   films: string[];
@@ -15,12 +15,15 @@ interface Character {
 }
 
 const MainItem: FC<MainItemProps> = (props) => {
+  const { page } = useAppSelector((state) => state.dataReducer);
+  const { setIsDetails } = dataSlice.actions;
+  const dispatch = useAppDispatch();
   return (
     <NavLink
       data-testid="character"
-      to={`/details/${props.item._id}?page=${props.page}`}
+      to={`/details/${props.item._id}?page=${page}`}
       className={classes.mainItem}
-      onClick={() => props.setIsDetails(true)}
+      onClick={() => dispatch(setIsDetails(true))}
     >
       <div
         data-testid="background"

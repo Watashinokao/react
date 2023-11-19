@@ -1,27 +1,30 @@
-import React, { FC, useContext } from 'react';
-import { PaginationProps, ResultsContext } from '../../Interfaces/Interfaces';
-const Pagination: FC<PaginationProps> = (props) => {
-  const { results } = useContext(ResultsContext);
+import React, { FC } from 'react';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { dataSlice } from '../../store/redusers/dataSlice';
+const Pagination: FC = () => {
+  const { page, pageSize } = useAppSelector((state) => state.dataReducer);
+  const dispatch = useAppDispatch();
+  const { setPageSize, setPage } = dataSlice.actions;
   return (
     <div className={'pagination'}>
       <button
-        onClick={() => props.handlePage('prev')}
-        disabled={props.page <= 1}
+        onClick={() => dispatch(setPage('prev'))}
+        disabled={Number(page) <= 1}
       >
         Prev
       </button>
-      <div data-testid={'current-page'}>{props.page}</div>
+      <div data-testid={'current-page'}>{page}</div>
       <button
-        onClick={() => props.handlePage('next')}
-        disabled={props.page >= results.info.totalPages}
+        onClick={() => dispatch(setPage('next'))}
+        // disabled={page >= results.info.totalPages}
       >
         Next
       </button>
       <p>Elements quantity:</p>
       <select
-        value={props.pageSize}
+        value={pageSize}
         className="select"
-        onChange={(e) => props.handlePageSize(Number(e.target.value))}
+        onChange={(e) => dispatch(setPageSize(e.target.value))}
       >
         <option>5</option>
         <option>10</option>

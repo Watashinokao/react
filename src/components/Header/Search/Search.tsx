@@ -1,10 +1,13 @@
-import React, { FC, useContext, useState } from 'react';
+import React, { FC, useState } from 'react';
 import classes from './Search.module.css';
 import '../../../index.css';
-import { RequestContext } from '../../../Interfaces/Interfaces';
+import { dataSlice } from '../../../store/redusers/dataSlice';
+import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
 
 const Search: FC = () => {
-  const { request, setRequest } = useContext(RequestContext);
+  const { setRequest } = dataSlice.actions;
+  const dispatch = useAppDispatch();
+  const { request } = useAppSelector((state) => state.dataReducer);
   const [newRequest, setNewRequest] = useState(request || '');
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -23,7 +26,7 @@ const Search: FC = () => {
       <button
         data-testid="search-btn"
         onClick={() => {
-          setRequest(newRequest);
+          dispatch(setRequest(newRequest));
           localStorage.setItem('prevRequest', newRequest.trim());
         }}
         className={'button'}

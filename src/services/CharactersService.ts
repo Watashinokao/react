@@ -7,10 +7,10 @@ export const charactersAPI = createApi({
   endpoints: (build) => ({
     fetchAllCharacters: build.query<
       ResultsAPI,
-      { name: string; page: number; pageSize: number }
+      { name: string; page: string; pageSize: string }
     >({
       query: (arg) => {
-        const { name = '', page = 1, pageSize = 10 } = arg;
+        const { name = '', page = '1', pageSize = '10' } = arg;
         return {
           url: '/character',
           params: {

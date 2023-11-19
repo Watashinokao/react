@@ -1,5 +1,12 @@
-import { ReactNode, Dispatch, SetStateAction, createContext } from 'react';
+import { ReactNode } from 'react';
 
+export interface Character {
+  imageUrl: string;
+  name: string;
+  _id: number;
+  films: string[];
+  tvShow: string[];
+}
 export interface Results {
   data: Character[];
   info: {
@@ -27,28 +34,17 @@ export interface CharacterAPI {
     totalPages: number;
   };
 }
+export interface dataState {
+  request: string;
+  page: string;
+  pageSize: string;
+  isDetails: boolean;
+  isLoadingDetails: boolean;
+  isLoadingCards: boolean;
+}
 
 export interface MockCharacter {
   data: Character;
-}
-export interface Character {
-  imageUrl: string;
-  name: string;
-  _id: number;
-  films: string[];
-  tvShow: string[];
-}
-
-export interface ContextOutlet {
-  handleDetails: () => void;
-  page: number;
-}
-
-export interface PaginationProps {
-  pageSize: number;
-  page: number;
-  handlePage: (page: string) => void;
-  handlePageSize: (size: number) => void;
 }
 export interface ErrorBoundaryState {
   hasError: boolean;
@@ -57,45 +53,6 @@ export interface ErrorBoundaryState {
 export interface ErrorBoundaryProps {
   children: ReactNode;
 }
-
-export interface ContextRequest {
-  request: string | null;
-  setRequest: Dispatch<SetStateAction<string | null>>;
+export interface MainProps {
+  results: Character[] | Character;
 }
-
-export interface ContextResults {
-  results: {
-    data: Character[];
-    info: {
-      count: number;
-      nextPage: string;
-      previousPage: string;
-      totalPages: number;
-    };
-  };
-  setResults: Dispatch<
-    SetStateAction<{
-      data: Character[];
-      info: {
-        count: number;
-        nextPage: string;
-        previousPage: string;
-        totalPages: number;
-      };
-    }>
-  >;
-}
-
-export const RequestContext = createContext({} as ContextRequest);
-export const ResultsContext = createContext<ContextResults>({
-  results: {
-    data: [],
-    info: {
-      count: 0,
-      nextPage: '',
-      previousPage: '',
-      totalPages: 0,
-    },
-  },
-  setResults: (prevState: SetStateAction<Results>) => prevState,
-});
