@@ -3,10 +3,16 @@ import { render, screen } from '@testing-library/react';
 
 import Header from './Header';
 import { userEvent } from '@testing-library/user-event';
+import { Provider } from 'react-redux';
+import { setupStore } from '../../store/store';
 
 describe('error boundary', () => {
   it.fails('error', async () => {
-    render(<Header />);
+    render(
+      <Provider store={setupStore()}>
+        <Header />
+      </Provider>
+    );
     expect(screen.getByTestId('error-request')).not.toBeInTheDocument();
     const errorBtn = screen.getByRole('button', { name: /error/i });
     expect(await userEvent.click(errorBtn)).toThrowError();

@@ -1,8 +1,29 @@
 import { render, screen } from '@testing-library/react';
-import App from '../../App';
 import { userEvent } from '@testing-library/user-event';
-import React from 'react';
+import React, { useState } from 'react';
+import { charactersAPI } from '../../services/CharactersService';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { setupStore } from '../../store/store';
+import RootLayout from '../RootLayout/RootLayout';
+import { expect } from 'vitest';
 
+let mockParams = { page: '1' };
+vi.mock('react-router-dom', async () => ({
+  ...((await vi.importActual('react-router-dom')) as object),
+  useSearchParams: () => {
+    const [params, setParams] = useState(
+      new URLSearchParams('page=' + Number(mockParams.page))
+    );
+    return [
+      params,
+      (newParams: { page: string }) => {
+        mockParams = newParams;
+        setParams(new URLSearchParams('page=' + Number(newParams.page)));
+      },
+    ];
+  },
+}));
 describe('page', () => {
   test(' component updates URL query parameter when page changes', async () => {
     const resData = [
@@ -120,19 +141,25 @@ describe('page', () => {
         totalPages: 5,
       },
     };
-    const mockFetch = Promise.resolve({
-      json: () => Promise.resolve(res),
-    });
-    global.fetch = vi.fn().mockImplementation(() => mockFetch);
-    render(<App />);
-
-    expect(window.location.search).toEqual('?page=1');
+    const spyOn = vi.spyOn(charactersAPI, 'useFetchAllCharactersQuery');
+    spyOn.mockReturnValue({ data: res, refetch: vi.fn() });
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <Provider store={setupStore()}>
+          <Routes>
+            <Route path="/" element={<RootLayout />} />
+          </Routes>
+        </Provider>
+      </MemoryRouter>
+    );
 
     const nextBtn = await screen.findByRole('button', { name: /next/i });
-    await userEvent.click(nextBtn);
-    expect(window.location.search).toEqual('?page=2');
     const prevBtn = await screen.findByRole('button', { name: /prev/i });
+    expect(nextBtn).toBeInTheDocument();
+    expect(prevBtn).toBeInTheDocument();
+    await userEvent.click(nextBtn);
+    expect(mockParams).toEqual({ page: '2' });
     await userEvent.click(prevBtn);
-    expect(window.location.search).toEqual('?page=1');
+    expect(mockParams).toEqual({ page: '1' });
   });
 });

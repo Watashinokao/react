@@ -25,7 +25,7 @@ const RootLayout: FC = () => {
     setSearch({
       page: `${page}`,
     });
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [page]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (isError) {
     throw new Error('Error server');
@@ -42,7 +42,7 @@ const RootLayout: FC = () => {
       ) : data && data.info.count ? (
         <>
           <Pagination />
-          <div className={isDetails ? 'open-details' : ''}>
+          <div className={isDetails ? 'open-details' : ''} data-testid="main">
             <Main results={data.data} />
             <Outlet />
           </div>
