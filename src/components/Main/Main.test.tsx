@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 import { setupStore } from '../../store/store';
 import { charactersAPI } from '../../services/CharactersService';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
-import { response } from '../../../tests/resultsMock';
+import { resCard, response } from '../../../tests/resultsMock';
 import { expect } from 'vitest';
 
 describe('tests', () => {
@@ -87,16 +87,6 @@ describe('tests', () => {
     expect(details).toBeInTheDocument();
   });
   test('clicking triggers an additional API call to fetch detailed information', () => {
-    const resCard = {
-      data: {
-        _id: 1,
-        films: ['film1'],
-        tvShow: ['tvShow1'],
-        name: 'Character1',
-        imageUrl:
-          'https://static.wikia.nocookie.net/disney/images/1/15/Arianna_Tangled.jpg/revision/latest?cb=20160715191802',
-      },
-    };
     const spyOnDetails = vi.spyOn(charactersAPI, 'useFetchCharacterByIdQuery');
     spyOnDetails.mockReturnValue({ data: resCard, refetch: vi.fn() });
     render(

@@ -7,6 +7,7 @@ import { charactersAPI } from '../../services/CharactersService';
 import { Provider } from 'react-redux';
 import { setupStore } from '../../store/store';
 import { expect } from 'vitest';
+import { resCard } from '../../../tests/resultsMock';
 
 describe('details test', () => {
   it('loading indicator is displayed while fetching data', async () => {
@@ -23,16 +24,6 @@ describe('details test', () => {
     expect(details).toHaveTextContent('Loading...');
   });
   it('clicking the close button hides the component', async () => {
-    const resCard = {
-      data: {
-        _id: 1,
-        films: ['film1'],
-        tvShow: ['tvShow1'],
-        name: 'Character1',
-        imageUrl:
-          'https://static.wikia.nocookie.net/disney/images/1/15/Arianna_Tangled.jpg/revision/latest?cb=20160715191802',
-      },
-    };
     const spyOnDetails = vi.spyOn(charactersAPI, 'useFetchCharacterByIdQuery');
     spyOnDetails.mockReturnValue({ data: resCard, refetch: vi.fn() });
     render(

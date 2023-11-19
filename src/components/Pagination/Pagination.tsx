@@ -1,7 +1,11 @@
 import React, { FC } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { dataSlice } from '../../store/redusers/dataSlice';
-const Pagination: FC = () => {
+
+interface PaginationProps {
+  totalPages: number;
+}
+const Pagination: FC<PaginationProps> = (props) => {
   const { page, pageSize } = useAppSelector((state) => state.dataReducer);
   const dispatch = useAppDispatch();
   const { setPageSize, setPage } = dataSlice.actions;
@@ -16,7 +20,7 @@ const Pagination: FC = () => {
       <div data-testid={'current-page'}>{page}</div>
       <button
         onClick={() => dispatch(setPage('next'))}
-        // disabled={page >= results.info.totalPages}
+        disabled={Number(page) >= props.totalPages}
       >
         Next
       </button>

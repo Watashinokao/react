@@ -1,6 +1,6 @@
-import { MockCharacter, Results } from '../src/Interfaces/Interfaces';
+import { ResultsAPI } from '../src/Interfaces/Interfaces';
 
-export const characterMock: MockCharacter = {
+export const resCard = {
   data: {
     _id: 1,
     films: ['film1'],
@@ -10,7 +10,7 @@ export const characterMock: MockCharacter = {
       'https://static.wikia.nocookie.net/disney/images/1/15/Arianna_Tangled.jpg/revision/latest?cb=20160715191802',
   },
 };
-export const response: Results = {
+export const response: ResultsAPI = {
   data: [
     {
       _id: 1,

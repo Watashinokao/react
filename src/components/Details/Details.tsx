@@ -11,14 +11,9 @@ const Details: FC = () => {
   const dispatch = useAppDispatch();
 
   const { id } = useParams();
-  const { data, isFetching } = charactersAPI.useFetchCharacterByIdQuery(
-    id || ''
-  );
+  const { data } = charactersAPI.useFetchCharacterByIdQuery(id || '');
   const { page, isLoadingDetails } = useAppSelector(
     (state) => state.dataReducer
-  );
-  console.log(
-    `isLoadingDetails: ${isLoadingDetails} isFetching: ${isFetching}`
   );
 
   return (

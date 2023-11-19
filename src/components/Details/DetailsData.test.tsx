@@ -6,19 +6,10 @@ import React from 'react';
 import { charactersAPI } from '../../services/CharactersService';
 import { Provider } from 'react-redux';
 import { setupStore } from '../../store/store';
+import { resCard } from '../../../tests/resultsMock';
 
 describe('details data', () => {
   it('the detailed card component correctly displays the detailed card data', async () => {
-    const resCard = {
-      data: {
-        _id: 1,
-        films: ['film1'],
-        tvShow: ['tvShow1'],
-        name: 'Character1',
-        imageUrl:
-          'https://static.wikia.nocookie.net/disney/images/1/15/Arianna_Tangled.jpg/revision/latest?cb=20160715191802',
-      },
-    };
     const spyOnDetails = vi.spyOn(charactersAPI, 'useFetchCharacterByIdQuery');
     spyOnDetails.mockReturnValue({ data: resCard, refetch: vi.fn() });
     render(

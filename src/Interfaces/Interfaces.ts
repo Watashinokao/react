@@ -7,15 +7,6 @@ export interface Character {
   films: string[];
   tvShow: string[];
 }
-export interface Results {
-  data: Character[];
-  info: {
-    count: number;
-    nextPage: string;
-    previousPage: string;
-    totalPages: number;
-  };
-}
 export interface ResultsAPI {
   data: Character[];
   info: {
@@ -41,10 +32,6 @@ export interface dataState {
   isDetails: boolean;
   isLoadingDetails: boolean;
   isLoadingCards: boolean;
-}
-
-export interface MockCharacter {
-  data: Character;
 }
 export interface ErrorBoundaryState {
   hasError: boolean;

@@ -41,7 +41,7 @@ const RootLayout: FC = () => {
         />
       ) : data && data.info.count ? (
         <>
-          <Pagination />
+          <Pagination totalPages={data.info.totalPages} />
           <div className={isDetails ? 'open-details' : ''} data-testid="main">
             <Main results={data.data} />
             <Outlet />

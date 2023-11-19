@@ -3,15 +3,10 @@ import classes from './MainItem.module.css';
 import { NavLink } from 'react-router-dom';
 import { dataSlice } from '../../../store/redusers/dataSlice';
 import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
+import { Character } from '../../../Interfaces/Interfaces';
 
 interface MainItemProps {
   item: Character;
-}
-interface Character {
-  films: string[];
-  imageUrl: string;
-  name: string;
-  _id: number;
 }
 
 const MainItem: FC<MainItemProps> = (props) => {

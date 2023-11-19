@@ -4,7 +4,7 @@ import { charactersAPI } from '../../services/CharactersService';
 
 const initialState: dataState = {
   request: localStorage.getItem('prevRequest') || '',
-  page: window.location.search.at(-1) || '1',
+  page: window.location.search.slice(6) || '1',
   pageSize: '10',
   isDetails: false,
   isLoadingDetails: false,
@@ -28,16 +28,11 @@ export const dataSlice = createSlice({
     },
     setPageSize: (state, action: PayloadAction<string>) => {
       state.pageSize = action.payload;
+      state.page = '1';
     },
     setIsDetails: (state, action: PayloadAction<boolean>) => {
       state.isDetails = action.payload;
     },
-    // setIsLoadingDetails: (state, action: PayloadAction<boolean>) => {
-    //   state.isLoadingDetails = action.payload;
-    // },
-    // setIsLoadingCards: (state, action: PayloadAction<boolean>) => {
-    //   state.isLoadingCards = action.payload;
-    // },
   },
   extraReducers: (builder) => {
     builder.addMatcher(
