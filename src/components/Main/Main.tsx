@@ -11,17 +11,17 @@ const Main: FC<MainProps> = (props) => {
   const dispatch = useAppDispatch();
   const { setIsDetails } = dataSlice.actions;
   // const { results } = useContext(ResultsContext);
-  const navigate = useNavigate();
-  const goBack = (path: string) => {
-    navigate(path);
-  };
+  // const navigate = useNavigate();
+  // const goBack = (path: string) => {
+  //   navigate(path);
+  // };
   return (
     <div
       className={classes.main}
       onClick={() => {
         if (isDetails) {
           dispatch(setIsDetails(false));
-          goBack(`/?page=${page}`);
+          // goBack(`/?page=${page}`);
         }
       }}
     >

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import classes from './ErrorBoundary.module.css';
-import '../../App.css';
 import {
   ErrorBoundaryProps,
   ErrorBoundaryState,

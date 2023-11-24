@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import classes from './Search.module.css';
-import '../../../index.css';
+// import '../../../index.css';
 import { dataSlice } from '../../../store/redusers/dataSlice';
 import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
 
@@ -27,7 +27,7 @@ const Search: FC = () => {
         data-testid="search-btn"
         onClick={() => {
           dispatch(setRequest(newRequest));
-          localStorage.setItem('prevRequest', newRequest.trim());
+          // localStorage.setItem('prevRequest', newRequest.trim());
         }}
         className={'button'}
       >

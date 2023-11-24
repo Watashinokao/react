@@ -3,8 +3,10 @@ import { dataState } from '../../Interfaces/Interfaces';
 import { charactersAPI } from '../../services/CharactersService';
 
 const initialState: dataState = {
-  request: localStorage.getItem('prevRequest') || '',
-  page: window.location.search.slice(6) || '1',
+  // request: localStorage.getItem('prevRequest') || '',
+  request: 'queen',
+  // page: window.location.search.slice(6) || '1',
+  page: '1',
   pageSize: '10',
   isDetails: false,
   isLoadingDetails: false,

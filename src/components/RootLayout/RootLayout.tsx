@@ -1,5 +1,5 @@
 import './RootLayout.module.css';
-import '../../index.css';
+// import '../../index.css';
 import React, { FC, useEffect } from 'react';
 
 import Header from '../Header/Header';
@@ -19,13 +19,14 @@ const RootLayout: FC = () => {
     page: `${page}`,
     pageSize: `${pageSize}`,
   });
-  const [, setSearch] = useSearchParams();
+  // const [, setSearch] = useSearchParams();
 
-  useEffect(() => {
-    setSearch({
-      page: `${page}`,
-    });
-  }, [page]); // eslint-disable-line react-hooks/exhaustive-deps
+  // useEffect(() => {
+  //   setSearch({
+  //     page: `${page}`,
+  //   });
+  // }, [page]);
+  // eslint-disable-line react-hooks/exhaustive-deps
 
   if (isError) {
     throw new Error('Error server');

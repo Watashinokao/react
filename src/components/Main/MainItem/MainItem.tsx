@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom';
 import { dataSlice } from '../../../store/redusers/dataSlice';
 import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
 import { Character } from '../../../Interfaces/Interfaces';
+import Link from 'next/link';
 
 interface MainItemProps {
   item: Character;
@@ -14,9 +15,10 @@ const MainItem: FC<MainItemProps> = (props) => {
   const { setIsDetails } = dataSlice.actions;
   const dispatch = useAppDispatch();
   return (
-    <NavLink
+    <Link
+      href={`/details/${props.item._id}`}
       data-testid="character"
-      to={`/details/${props.item._id}?page=${page}`}
+      // to={`/details/${props.item._id}?page=${page}`}
       className={classes.mainItem}
       onClick={() => dispatch(setIsDetails(true))}
     >
@@ -29,7 +31,7 @@ const MainItem: FC<MainItemProps> = (props) => {
         }}
       ></div>
       <p className={classes.name}>{props.item.name}</p>
-    </NavLink>
+    </Link>
   );
 };
 
