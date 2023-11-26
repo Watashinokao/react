@@ -40,14 +40,3 @@ export const res = [
       'https://static.wikia.nocookie.net/disney/images/1/15/Arianna_Tangled.jpg/revision/latest?cb=20160715191802',
   },
 ];
-export const contextResponse = {
-  results: {
-    data: res,
-    info: {
-      count: 5,
-      nextPage: '',
-      previousPage: '',
-      totalPages: 5,
-    },
-  },
-};

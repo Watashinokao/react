@@ -1,9 +1,15 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { CharacterAPI, ResultsAPI } from '../Interfaces/Interfaces';
+import { HYDRATE } from 'next-redux-wrapper';
 
 export const charactersAPI = createApi({
   reducerPath: 'charactersAPI',
   baseQuery: fetchBaseQuery({ baseUrl: 'https://api.disneyapi.dev' }),
+  extractRehydrationInfo(action, { reducerPath }) {
+    if (action.type === HYDRATE) {
+      return action.payload[reducerPath];
+    }
+  },
   endpoints: (build) => ({
     fetchAllCharacters: build.query<
       ResultsAPI,
@@ -28,3 +34,10 @@ export const charactersAPI = createApi({
     }),
   }),
 });
+
+export const {
+  useFetchAllCharactersQuery,
+  useFetchCharacterByIdQuery,
+  useLazyFetchAllCharactersQuery,
+  util: { getRunningQueriesThunk },
+} = charactersAPI;

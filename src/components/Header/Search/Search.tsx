@@ -1,14 +1,13 @@
 import React, { FC, useState } from 'react';
 import classes from './Search.module.css';
-// import '../../../index.css';
-import { dataSlice } from '../../../store/redusers/dataSlice';
-import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
+import { useRouter } from 'next/router';
 
 const Search: FC = () => {
-  const { setRequest } = dataSlice.actions;
-  const dispatch = useAppDispatch();
-  const { request } = useAppSelector((state) => state.dataReducer);
-  const [newRequest, setNewRequest] = useState(request || '');
+  const router = useRouter();
+  const name = router.query.name;
+  const pageSize = router.query.pageSize;
+  const page = router.query.page;
+  const [newRequest, setNewRequest] = useState(name ? name : '');
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setNewRequest(e.target.value);
@@ -26,8 +25,14 @@ const Search: FC = () => {
       <button
         data-testid="search-btn"
         onClick={() => {
-          dispatch(setRequest(newRequest));
-          // localStorage.setItem('prevRequest', newRequest.trim());
+          router.push({
+            pathname: '/',
+            query: {
+              page: page,
+              pageSize: pageSize ? String(pageSize) : '10',
+              name: newRequest,
+            },
+          });
         }}
         className={'button'}
       >

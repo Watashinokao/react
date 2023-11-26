@@ -1,51 +1,51 @@
-import React, { FC } from 'react';
+import { useRouter } from 'next/router';
 import classes from './Details.module.css';
-import { useNavigate, useParams } from 'react-router-dom';
-import { charactersAPI } from '../../services/CharactersService';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { dataSlice } from '../../store/redusers/dataSlice';
+import { CharacterAPI } from '../../Interfaces/Interfaces';
+import { FC } from 'react';
 
-const Details: FC = () => {
-  const { setIsDetails } = dataSlice.actions;
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+interface DetailsProps {
+  data: CharacterAPI;
+}
 
-  const { id } = useParams();
-  const { data } = charactersAPI.useFetchCharacterByIdQuery(id || '');
-  const { page, isLoadingDetails } = useAppSelector(
-    (state) => state.dataReducer
-  );
+const Details: FC<DetailsProps> = (props) => {
+  const router = useRouter();
+  const pageSize = router.query.pageSize;
+  const page = router.query.page;
+  const name = router.query.name;
+  const { data } = props;
 
   return (
     <div className={classes.details} data-testid="details">
-      {isLoadingDetails ? (
-        <p>Loading...</p>
-      ) : (
-        data && (
-          <div className={classes.container}>
-            <button
-              data-testid="closeBtn"
-              className={classes.remove}
-              title={`I wish you a New Year's mood`}
-              onClick={() => {
-                dispatch(setIsDetails(false));
-                navigate(`/?page=${page}`);
-              }}
-            >
-              <img src="../src/assets/close.svg" alt="close details" />
-            </button>
-            <div
-              data-testid="detailsBackground"
-              className={classes.img}
-              style={{
-                background: `center no-repeat url(${data.data.imageUrl} )`,
-              }}
-            ></div>
-            <p>Film: {data.data.films[0] || '-'}</p>
-            <p>tvShow: {data.data.tvShow || '-'}</p>
-            <p>Name: {data.data.name}</p>
-          </div>
-        )
+      {data && (
+        <div className={classes.container}>
+          <button
+            data-testid="closeBtn"
+            className={classes.remove}
+            title={`I wish you a New Year's mood`}
+            onClick={() => {
+              router.push({
+                pathname: '/',
+                query: {
+                  page: page,
+                  pageSize: pageSize ? String(pageSize) : '10',
+                  name: name ? String(name) : '',
+                },
+              });
+            }}
+          >
+            <img src="../src/assets/close.svg" alt="close details" />
+          </button>
+          <div
+            data-testid="detailsBackground"
+            className={classes.img}
+            style={{
+              background: `center no-repeat url(${data.data.imageUrl} )`,
+            }}
+          ></div>
+          <p>Film: {data.data.films[0] || '-'}</p>
+          <p>tvShow: {data.data.tvShow || '-'}</p>
+          <p>Name: {data.data.name}</p>
+        </div>
       )}
     </div>
   );

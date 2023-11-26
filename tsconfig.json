@@ -21,7 +21,8 @@
     "jsx": "preserve",
     "noImplicitAny": true,
     "types": [
-      "@testing-library/jest-dom/vitest"
+      "@testing-library/jest-dom/vitest",
+      "vitest/globals"
     ],
     "incremental": true
   },

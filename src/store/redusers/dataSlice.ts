@@ -4,7 +4,7 @@ import { charactersAPI } from '../../services/CharactersService';
 
 const initialState: dataState = {
   // request: localStorage.getItem('prevRequest') || '',
-  request: 'queen',
+  request: '',
   // page: window.location.search.slice(6) || '1',
   page: '1',
   pageSize: '10',

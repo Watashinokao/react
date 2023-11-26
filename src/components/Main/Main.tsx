@@ -1,27 +1,27 @@
 import React, { FC } from 'react';
 import classes from './Main.module.css';
 import MainItem from './MainItem/MainItem';
-import { useNavigate } from 'react-router-dom';
 import { MainProps } from '../../Interfaces/Interfaces';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { dataSlice } from '../../store/redusers/dataSlice';
+import { useRouter } from 'next/router';
 
 const Main: FC<MainProps> = (props) => {
-  const { page, isDetails } = useAppSelector((state) => state.dataReducer);
-  const dispatch = useAppDispatch();
-  const { setIsDetails } = dataSlice.actions;
-  // const { results } = useContext(ResultsContext);
-  // const navigate = useNavigate();
-  // const goBack = (path: string) => {
-  //   navigate(path);
-  // };
+  const router = useRouter();
+  const page = router.query.page;
+  const pageSize = router.query.pageSize;
+  const name = router.query.name;
   return (
     <div
       className={classes.main}
       onClick={() => {
-        if (isDetails) {
-          dispatch(setIsDetails(false));
-          // goBack(`/?page=${page}`);
+        if (router.pathname === '/details/[id]') {
+          router.push({
+            pathname: '/',
+            query: {
+              page: page ? String(page) : '1',
+              pageSize: pageSize ? String(pageSize) : '10',
+              name: name ? String(name) : '',
+            },
+          });
         }
       }}
     >
