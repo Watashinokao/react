@@ -18,12 +18,20 @@ interface FormInputs extends HTMLFormControlsCollection {
   country: HTMLInputElement;
   terms_conditions: HTMLInputElement;
 }
+interface InputsValue {
+  name: string;
+  age: string;
+  email: string;
+  password: string;
+  repeatPassword: string;
+  gender: string;
+  picture: string;
+  country: string;
+  terms_conditions: string;
+}
 const UncontrolledForm = () => {
   const [password, setPassword] = useState('');
 
-  const handleChange = (event: FormEvent<HTMLInputElement>) => {
-    setPassword(event.currentTarget.value);
-  };
   const navigate = useNavigate();
   const { setCard } = dataSlice.actions;
   const dispatch = useAppDispatch();
@@ -38,7 +46,9 @@ const UncontrolledForm = () => {
     country: '',
     terms_conditions: '',
   });
-
+  const handleChange = (event: FormEvent<HTMLInputElement>) => {
+    setPassword(event.currentTarget.value);
+  };
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const inputs = event.currentTarget.elements as FormInputs;
@@ -71,15 +81,25 @@ const UncontrolledForm = () => {
       }
     } catch (err) {
       const errors = err as ValidationError;
+      const newValue: InputsValue = {
+        name: '',
+        age: '',
+        email: '',
+        password: '',
+        repeatPassword: '',
+        gender: '',
+        picture: '',
+        country: '',
+        terms_conditions: '',
+      };
       errors.inner.map((er) => {
-        setErrors((prevState) => ({
-          ...prevState,
-          [er.path as string]: er.message,
-        }));
+        newValue[er.path as keyof typeof newValue] = er.message;
       });
+      setErrors(() => ({
+        ...newValue,
+      }));
     }
   };
-  console.log(errors);
   return (
     <form onSubmit={handleSubmit} className={classes.containerForm}>
       <h2 className={classes.title}>Uncontrolled Form</h2>

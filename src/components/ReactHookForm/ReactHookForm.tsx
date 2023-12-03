@@ -21,14 +21,12 @@ export interface Schema {
 }
 const ReactHookForm = () => {
   const [password, setPassword] = useState('');
-
-  const handleChange = (event: FormEvent<HTMLInputElement>) => {
-    setPassword(event.currentTarget.value);
-  };
   const navigate = useNavigate();
   const { setCard } = dataSlice.actions;
   const dispatch = useAppDispatch();
-
+  const handleChange = (event: FormEvent<HTMLInputElement>) => {
+    setPassword(event.currentTarget.value);
+  };
   const {
     register,
     handleSubmit,
