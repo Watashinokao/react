@@ -49,5 +49,13 @@
     height: 40px;
     font-size: 20px;
     border-radius: 30px;
+}
+.password{
+    position: absolute;
+    border-radius: 20px;
+    width: 100px;
 
+    height: 5px;
+    top: 15px;
+    left: 130px;
 }

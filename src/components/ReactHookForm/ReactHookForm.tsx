@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FormEvent, useState } from 'react';
 import classes from '../UncontrolledForm/UncontrolledForm.module.css';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { schema } from '../../schema/schema';
@@ -20,6 +20,12 @@ interface Schema {
   terms_conditions: boolean;
 }
 const ReactHookForm = () => {
+  const [password, setPassword] = useState('');
+  console.log(password.length);
+
+  const handleChange = (event: FormEvent<HTMLInputElement>) => {
+    setPassword(event.currentTarget.value);
+  };
   const navigate = useNavigate();
   const { setCard } = dataSlice.actions;
   const dispatch = useAppDispatch();
@@ -59,8 +65,21 @@ const ReactHookForm = () => {
         <div>{errors.email?.message}</div>
       </label>
       <label>
-        Password{' '}
+        Password
+        <div
+          className={classes.password}
+          style={{
+            backgroundColor:
+              password.length < 5
+                ? '#8f0404'
+                : errors.password?.message || password.length < 8
+                  ? '#9a9208'
+                  : '#098f04',
+          }}
+        ></div>
         <input
+          value={password}
+          onInput={(event) => handleChange(event)}
           {...register('password')}
           type={'password'}
           placeholder={'Password'}
