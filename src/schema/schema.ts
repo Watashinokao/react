@@ -21,7 +21,6 @@ export const schema = object({
     .matches(/[!@#$%^&*()\-_=+{};:,<.>]/, 'добавьте спецсимвол'),
   repeatPassword: string()
     .required('поле обязательно')
-    .min(8, 'пароль не содержит 8 символов')
     .oneOf([ref('password')], 'пароли не совпадают'),
   gender: string().required('поле обязательно'),
   picture: mixed<FileList>().required('поле обязательно'),

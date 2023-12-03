@@ -1,41 +1,30 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import classes from './UncontrolledForm.module.css';
-import { boolean, number, object, ref, string, ValidationError } from 'yup';
-import { useAppDispatch, useAppSelector } from '../../store/hooks/redux';
-import { dataSlice, formData } from '../../store/slice/dataSlice';
+import { ValidationError } from 'yup';
+import { useAppDispatch } from '../../store/hooks/redux';
+import { dataSlice } from '../../store/slice/dataSlice';
 import { useNavigate } from 'react-router-dom';
+import { schema } from '../../schema/schema';
+import { countries } from '../../countries/countries';
 
-const schema = object({
-  name: string()
-    .test(
-      'Заглавная буква',
-      'введите имя с заглавной буквы',
-      (value) => !!value && value[0] === value[0].toUpperCase()
-    )
-    .required('поле обязательно'),
-
-  age: number()
-    .min(1, 'минимальный возраст 1')
-    .typeError('введите свой возраст')
-    .required('поле обязательно'),
-  email: string().email('некорректный email').required('поле обязательно'),
-  password: string()
-    .min(8, 'пароль не содержит 8 символов')
-    .required('поле обязательно'),
-  repeatPassword: string()
-    .min(8, 'пароль не содержит 8 символов')
-    .oneOf([ref('password')], 'пароли не совпадают')
-    .required('поле обязательно'),
-  gender: string().required('поле обязательно'),
-  picture: string().required('поле обязательно'),
-  country: string().required('поле обязательно'),
-  terms_conditions: boolean().oneOf([true], 'примите условия соглашения'),
-});
-
+interface FormInputs extends HTMLFormControlsCollection {
+  name: HTMLInputElement;
+  age: HTMLInputElement;
+  email: HTMLInputElement;
+  password: HTMLInputElement;
+  repeatPassword: HTMLInputElement;
+  gender: HTMLInputElement;
+  picture: HTMLInputElement;
+  country: HTMLInputElement;
+  terms_conditions: HTMLInputElement;
+}
 const UncontrolledForm = () => {
+  const [password, setPassword] = useState('');
+
+  const handleChange = (event: FormEvent<HTMLInputElement>) => {
+    setPassword(event.currentTarget.value);
+  };
   const navigate = useNavigate();
-  const { cards } = useAppSelector((state) => state.dataReducer);
-  console.log(cards);
   const { setCard } = dataSlice.actions;
   const dispatch = useAppDispatch();
   const [errors, setErrors] = useState({
@@ -49,33 +38,36 @@ const UncontrolledForm = () => {
     country: '',
     terms_conditions: '',
   });
-
+  useEffect(() => {});
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data: formData = {
-      name: '',
-      age: '',
-      email: '',
-      password: '',
-      repeatPassword: '',
-      gender: '',
-      picture: '',
-      country: '',
-      terms_conditions: '',
+    const inputs = event.currentTarget.elements as FormInputs;
+    const data = {
+      name: inputs.name.value,
+      age: inputs.age.value,
+      email: inputs.email.value,
+      password: inputs.password.value,
+      repeatPassword: inputs.repeatPassword.value,
+      gender: inputs.gender.value,
+      picture: inputs.picture.files,
+      country: inputs.country.value,
+      terms_conditions: inputs.terms_conditions.checked,
     };
-    Array.from(event.currentTarget.elements).map((el) => {
-      const input = el as HTMLInputElement;
-      if (input.name) {
-        if (input.type === 'checkbox') data.terms_conditions = input.checked;
-        else data[input.name as keyof typeof data] = input.value;
-      }
-    });
 
     try {
       const isValid = schema.validateSync(data, { abortEarly: false });
-      if (!isValid) {
-        dispatch(setCard(data));
-        navigate('/');
+      if (isValid) {
+        const reader = new FileReader();
+        data.picture && reader.readAsDataURL(data.picture[0]);
+        reader.onloadend = () => {
+          dispatch(
+            setCard({
+              ...data,
+              picture: reader.result as string,
+            })
+          );
+          navigate('/');
+        };
       }
     } catch (err) {
       const errors = err as ValidationError;
@@ -87,7 +79,7 @@ const UncontrolledForm = () => {
       });
     }
   };
-
+  console.log(errors);
   return (
     <form onSubmit={handleSubmit} className={classes.containerForm}>
       <h2 className={classes.title}>Uncontrolled Form</h2>
@@ -104,8 +96,24 @@ const UncontrolledForm = () => {
         <div>{errors.email}</div>
       </label>
       <label>
-        Password{' '}
-        <input name={'password'} type={'password'} placeholder={'Password'} />
+        Password
+        <div
+          className={classes.password}
+          style={{
+            backgroundColor:
+              password.length < 5
+                ? '#8f0404'
+                : errors.password || password.length < 8
+                  ? '#9a9208'
+                  : '#098f04',
+          }}
+        ></div>
+        <input
+          onInput={(event) => handleChange(event)}
+          name={'password'}
+          type={'password'}
+          placeholder={'Password'}
+        />
         <div>{errors.password}</div>
       </label>
       <label>
@@ -138,8 +146,19 @@ const UncontrolledForm = () => {
         <div>{errors.picture}</div>
       </label>
       <label>
-        Country <input name={'country'} type={'text'} placeholder={'Country'} />
+        Country{' '}
+        <input
+          list={'countriesList'}
+          name={'country'}
+          type={'text'}
+          placeholder={'Country'}
+        />
         <div>{errors.country}</div>
+        <datalist id="countriesList">
+          {countries.map((country, index) => {
+            return <option key={index} value={country}></option>;
+          })}
+        </datalist>
       </label>
       <label className={classes.checkbox}>
         <input

@@ -8,7 +8,7 @@ import { useAppDispatch } from '../../store/hooks/redux';
 import { dataSlice } from '../../store/slice/dataSlice';
 import { countries } from '../../countries/countries';
 
-interface Schema {
+export interface Schema {
   name: string;
   age: number;
   email: string;
@@ -21,7 +21,6 @@ interface Schema {
 }
 const ReactHookForm = () => {
   const [password, setPassword] = useState('');
-  console.log(password.length);
 
   const handleChange = (event: FormEvent<HTMLInputElement>) => {
     setPassword(event.currentTarget.value);
