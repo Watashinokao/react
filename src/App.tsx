@@ -6,12 +6,12 @@ function App() {
     <div className={'wrapper'}>
       <div>React Forms</div>
       <div>
-        <NavLink className={'link'} to={'form1'}>
+        <NavLink className={'link'} to={'UncontrolledForm'}>
           Uncontrolled Form
         </NavLink>
       </div>
       <div>
-        <NavLink className={'link'} to={'form2'}>
+        <NavLink className={'link'} to={'ReactHookForm'}>
           React Hook Form
         </NavLink>
       </div>

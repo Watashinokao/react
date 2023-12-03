@@ -1,21 +1,31 @@
 import React, { FormEvent, useState } from 'react';
 import classes from './UncontrolledForm.module.css';
 import { boolean, number, object, ref, string, ValidationError } from 'yup';
+import { useAppDispatch, useAppSelector } from '../../store/hooks/redux';
+import { dataSlice, formData } from '../../store/slice/dataSlice';
+import { useNavigate } from 'react-router-dom';
 
 const schema = object({
-  name: string().required('поле обязательно'),
+  name: string()
+    .test(
+      'Заглавная буква',
+      'введите имя с заглавной буквы',
+      (value) => !!value && value[0] === value[0].toUpperCase()
+    )
+    .required('поле обязательно'),
+
   age: number()
-    .required('введите свой возраст')
-    .integer()
-    .typeError('введите свой возраст'),
-  email: string().required('поле обязательно').email(),
+    .min(1, 'минимальный возраст 1')
+    .typeError('введите свой возраст')
+    .required('поле обязательно'),
+  email: string().email('некорректный email').required('поле обязательно'),
   password: string()
-    .required('поле обязательно')
-    .min(8, 'пароль не содержит 8 символов'),
-  repeatPassword: string()
-    .required('поле обязательно')
     .min(8, 'пароль не содержит 8 символов')
-    .oneOf([ref('password')], 'пароли не совпадают'),
+    .required('поле обязательно'),
+  repeatPassword: string()
+    .min(8, 'пароль не содержит 8 символов')
+    .oneOf([ref('password')], 'пароли не совпадают')
+    .required('поле обязательно'),
   gender: string().required('поле обязательно'),
   picture: string().required('поле обязательно'),
   country: string().required('поле обязательно'),
@@ -23,6 +33,11 @@ const schema = object({
 });
 
 const UncontrolledForm = () => {
+  const navigate = useNavigate();
+  const { cards } = useAppSelector((state) => state.dataReducer);
+  console.log(cards);
+  const { setCard } = dataSlice.actions;
+  const dispatch = useAppDispatch();
   const [errors, setErrors] = useState({
     name: '',
     age: '',
@@ -37,17 +52,31 @@ const UncontrolledForm = () => {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const formData: { [key: string]: string | boolean } = {};
+    const data: formData = {
+      name: '',
+      age: '',
+      email: '',
+      password: '',
+      repeatPassword: '',
+      gender: '',
+      picture: '',
+      country: '',
+      terms_conditions: '',
+    };
     Array.from(event.currentTarget.elements).map((el) => {
       const input = el as HTMLInputElement;
       if (input.name) {
-        if (input.type === 'checkbox') formData[input.name] = input.checked;
-        else formData[input.name] = input.value;
+        if (input.type === 'checkbox') data.terms_conditions = input.checked;
+        else data[input.name as keyof typeof data] = input.value;
       }
     });
 
     try {
-      schema.validateSync(formData, { abortEarly: false });
+      const isValid = schema.validateSync(data, { abortEarly: false });
+      if (!isValid) {
+        dispatch(setCard(data));
+        navigate('/');
+      }
     } catch (err) {
       const errors = err as ValidationError;
       errors.inner.map((er) => {
@@ -57,7 +86,6 @@ const UncontrolledForm = () => {
         }));
       });
     }
-    console.log(errors);
   };
 
   return (

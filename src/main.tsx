@@ -10,19 +10,24 @@ import {
 } from 'react-router-dom';
 import UncontrolledForm from './components/UncontrolledForm/UncontrolledForm';
 import ReactHookForm from './components/ReactHookForm/ReactHookForm';
+import { setupStore } from './store/store';
+import { Provider } from 'react-redux';
+const store = setupStore();
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path={'/'}>
       <Route path={'/'} element={<App />} />
-      <Route path={'form1'} element={<UncontrolledForm />} />
-      <Route path={'form2'} element={<ReactHookForm />} />
+      <Route path={'UncontrolledForm'} element={<UncontrolledForm />} />
+      <Route path={'ReactHookForm'} element={<ReactHookForm />} />
     </Route>
   )
 );
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   </React.StrictMode>
 );
