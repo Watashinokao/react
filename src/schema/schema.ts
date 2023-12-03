@@ -25,9 +25,14 @@ export const schema = object({
   gender: string().required('поле обязательно'),
   picture: mixed<FileList>()
     .required('поле обязательно')
-    .test('required', 'поле обязательно', (value) => value.length > 0)
-    .test('fileSize', 'максимальный размер 5мб', (value) => {
+    .test('поле обязательно', 'поле обязательно', (value) => value.length > 0)
+    .test('размер', 'максимальный размер 5мб', (value) => {
       return !!value.length && value[0].size <= 5242880;
+    })
+    .test('тип файла', 'тип файла не поддерживается', (value) => {
+      return (
+        !!value.length && ['image/jpeg', 'image/png'].includes(value[0].type)
+      );
     }),
   country: string().required('поле обязательно'),
   terms_conditions: boolean()
