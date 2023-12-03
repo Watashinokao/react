@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import classes from './UncontrolledForm.module.css';
 import { ValidationError } from 'yup';
 import { useAppDispatch } from '../../store/hooks/redux';
@@ -38,7 +38,7 @@ const UncontrolledForm = () => {
     country: '',
     terms_conditions: '',
   });
-  useEffect(() => {});
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const inputs = event.currentTarget.elements as FormInputs;
