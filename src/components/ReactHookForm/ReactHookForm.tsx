@@ -29,8 +29,6 @@ const ReactHookForm = () => {
     handleSubmit,
     formState: { errors, isValid },
   } = useForm<Schema>({ mode: 'all', resolver: yupResolver(schema) });
-  console.log(isValid);
-  console.log(errors);
   const onSubmit: SubmitHandler<Schema> = (data) => {
     const reader = new FileReader();
     reader.readAsDataURL(data.picture[0]);
@@ -46,7 +44,7 @@ const ReactHookForm = () => {
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={classes.containerForm}>
-      <h2 className={classes.title}>ReactHookForm</h2>
+      <h2 className={classes.title}>React Hook Form</h2>
       <label>
         Name <input {...register('name')} type={'text'} placeholder={'Name'} />
         <div>{errors.name?.message}</div>

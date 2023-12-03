@@ -1,6 +1,4 @@
 .wrapper{
-    width: 100vw;
-    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -8,6 +6,7 @@
     font-size: 50px;
     gap: 20px;
     color: #0e2f3a;
+    padding: 20px;
 }
 .link{
     text-decoration: none;
@@ -15,4 +14,14 @@
 }
 .link:hover{
     color: #00abab;
+}
+.cards{
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 30px;
+
 }
