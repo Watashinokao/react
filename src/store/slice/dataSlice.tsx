@@ -2,14 +2,14 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface formData {
   name: string;
-  age: string;
+  age: number;
   email: string;
   password: string;
   repeatPassword?: string;
   gender: string;
   picture: string;
   country: string;
-  terms_conditions: string | boolean;
+  terms_conditions: boolean;
 }
 
 interface cardState {
